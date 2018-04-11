@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,10 @@ import com.enterprise.pc.applicationlocation.db.AppDatabase;
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
 import com.enterprise.pc.applicationlocation.vm.LocationDataViewModel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
 
+    final String filenameOfLocationDataOutput = "locationDataOutput.txt";
+    File fileLocationDataOutput;
+    FileOutputStream fileOutputStreamLocationDataOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
         locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
 
         addListeners();
+
+        initializeLocationDataOutputFile();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        closeLocationDataOutputFile();
 
     }
 
@@ -105,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         if(textToDisplayLineSecond != null){
 
                             textViewTextToDisplayLineSecond.setText(textToDisplayLineSecond + " " + sizeOfLocationDataList + " " + count);
+
                         }
 
                     }
@@ -217,8 +236,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void useObtainedLocationData(Location location) {
 
-        count++;
-
         long timeWhenDataObtained = location.getTime();
 
         Date date = new Date(timeWhenDataObtained);
@@ -237,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        writeDataToFile(locationData);
 
     }
 
@@ -269,6 +287,74 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeLocationDataOutputFile(){
+
+        if(isExternalStorageWritable()){
+
+            fileLocationDataOutput = new File(getApplicationContext().getExternalFilesDir(null) + "/" + filenameOfLocationDataOutput);
+
+            try {
+                fileOutputStreamLocationDataOutput = new FileOutputStream(fileLocationDataOutput, true);
+            } catch (FileNotFoundException e) {
+                //e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    private void closeLocationDataOutputFile(){
+
+        try {
+            fileOutputStreamLocationDataOutput.close();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+
+    }
+
+    private void writeDataToFile(LocationData locationData){
+
+
+        if(locationData != null){
+
+                String outputLine = count + " " + locationData.getLatitude() + " " + locationData.getLongitude() + "\n";
+
+                try {
+
+                    if (isExternalStorageWritable()) {
+                        fileOutputStreamLocationDataOutput.write(outputLine.getBytes());
+
+                        count++;
+                    }
+
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+
+
+        }
+
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
 
 }
