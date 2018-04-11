@@ -1,8 +1,16 @@
 package com.enterprise.pc.applicationlocation;
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,19 +21,25 @@ import com.enterprise.pc.applicationlocation.db.AppDatabase;
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
 import com.enterprise.pc.applicationlocation.vm.LocationDataViewModel;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     Button buttonStart;
-    TextView textViewTextToDisplayLine;
+    Button buttonStop;
+    TextView textViewTextToDisplayLineFirst;
+    TextView textViewTextToDisplayLineSecond;
     LocationDataViewModel locationDataViewModel;
     int count = 1;
 
     AppExecutors executors;
     AppDatabase appDatabase;
     DataRepository dataRepository;
+
+    LocationManager locationManager;
+    LocationListener locationListener;
 
 
     @Override
@@ -35,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
         executors = new AppExecutors();
 
-        textViewTextToDisplayLine = (TextView) findViewById(R.id.textViewTextToDisplayLine);
+        textViewTextToDisplayLineFirst = (TextView) findViewById(R.id.textViewTextToDisplayLineFirst);
+        textViewTextToDisplayLineSecond = (TextView) findViewById(R.id.textViewTextToDisplayLineSecond);
         buttonStart = (Button)findViewById(R.id.buttonStart);
+        buttonStop = (Button)findViewById(R.id.buttonStop);
 
         locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
 
@@ -46,18 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void addListeners() {
 
-        setDataListeners();
-        setButtonListeners();
-
+        addDataListeners();
+        addButtonListeners();
+        addListenerForGPS();
     }
 
-    private void setButtonListeners() {
+    private void addButtonListeners() {
 
-        setStartButtonListener();
-
+        addStartButtonListener();
+        addStopButtonListener();
     }
 
-    private void setDataListeners() {
+    private void addDataListeners() {
 
         dataRepository = ((BasicApp) getApplication()).getRepository();
 
@@ -70,15 +86,25 @@ public class MainActivity extends AppCompatActivity {
 
                 if(locationDataList != null && !locationDataList.isEmpty()){
 
-                    LocationData locationDataElement = locationDataList.get(locationDataList.size()-1);
+
+                    int sizeOfLocationDataList = locationDataList.size();
+                    LocationData locationDataElement = locationDataList.get(sizeOfLocationDataList-1);
 
                     if(locationDataElement != null){
 
-                        String textToDisplay = locationDataElement.getInfo();
+                        String textToDisplayLineFirst = locationDataElement.getFormattedTime();
 
-                        if(textToDisplay != null){
+                        String textToDisplayLineSecond = locationDataElement.getLatitude()
+                                + " " + locationDataElement.getLongitude();
 
-                            textViewTextToDisplayLine.setText(textToDisplay + " " + count);
+                        if(textToDisplayLineFirst != null){
+
+                            textViewTextToDisplayLineFirst.setText(textToDisplayLineFirst);
+                        }
+
+                        if(textToDisplayLineSecond != null){
+
+                            textViewTextToDisplayLineSecond.setText(textToDisplayLineSecond + " " + sizeOfLocationDataList + " " + count);
                         }
 
                     }
@@ -94,31 +120,155 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void setStartButtonListener() {
+    private void addStartButtonListener() {
 
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View vw) {
 
-
-                count++;
-                LocationData locationDataElement = new LocationData(count, "Test Successful! " + count);
-                List<LocationData> listOfLocationData = new ArrayList<LocationData>();
-                listOfLocationData.add(locationDataElement);
-
-                appDatabase = ((BasicApp) getApplication()).getDatabase();
-
-                executors.storageIO().execute(() -> {
-
-                    AppDatabase.insertData(appDatabase, listOfLocationData);
-
-                });
+                registerListenerForGPS();
 
             }
         });
 
     }
+
+    private void addStopButtonListener() {
+
+        buttonStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                removeListenerForGPS();
+
+            }
+        });
+
+    }
+
+    private void addListenerForGPS() {
+
+        // Acquire a reference to the system Location Manager
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                useObtainedLocationData(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+        checkPermissionAndRegisterListenerForGPS();
+
+    }
+
+
+
+    private void checkPermissionAndRegisterListenerForGPS() {
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+        } else {
+
+            // Permission has already been granted
+
+            registerListenerForGPS();
+
+        }
+
+    }
+
+    private void registerListenerForGPS() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            // Register the listener with the Location Manager to receive location updates
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+
+    }
+
+    private void removeListenerForGPS() {
+
+        // Remove the listener you previously added
+        locationManager.removeUpdates(locationListener);
+
+    }
+
+
+    private void useObtainedLocationData(Location location) {
+
+        count++;
+
+        long timeWhenDataObtained = location.getTime();
+
+        Date date = new Date(timeWhenDataObtained);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.dateFormat));
+        String formattedTime = simpleDateFormat.format(date);
+
+        LocationData locationData = new LocationData(timeWhenDataObtained, formattedTime, location.getLatitude(),
+                location.getLongitude(), location.getAltitude(), location.getAccuracy(), location.getProvider(), location.getSpeed());
+
+
+        appDatabase = ((BasicApp) getApplication()).getDatabase();
+
+        executors.storageIO().execute(() -> {
+
+            AppDatabase.insert(appDatabase, locationData);
+
+        });
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // ACCESS_FINE_LOCATION-related task you need to do.
+
+                    registerListenerForGPS();
+
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
 
 
 }

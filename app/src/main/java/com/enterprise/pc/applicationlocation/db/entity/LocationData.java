@@ -12,40 +12,135 @@ import android.arch.persistence.room.PrimaryKey;
 public class LocationData {
 
     @PrimaryKey
-    private int id;
+    private long id;
 
-    @ColumnInfo(name = "info")
-    private String info;
+    @ColumnInfo(name = "formattedTime")
+    private String formattedTime;
 
-    public String getInfo() {
-        return info;
+    @ColumnInfo(name = "latitude")
+    private double latitude;
+
+    @ColumnInfo(name = "longitude")
+    private double longitude;
+
+    @ColumnInfo(name = "altitude")
+    private double altitude;
+
+    @ColumnInfo(name = "accuracy")
+    private float accuracy;
+
+    @ColumnInfo(name = "provider")
+    private String provider;
+
+    @ColumnInfo(name = "speed")
+    private float speed;
+
+
+    public long getId() {
+        return this.id;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getFormattedTime() {
+        return this.formattedTime;
+    }
+
+    public void setFormattedTime(String formattedTime) {
+        this.formattedTime = formattedTime;
+    }
+
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getAltitude() {
+        return this.altitude;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
+
+    public float getAccuracy() {
+        return this.accuracy;
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public String getProvider() {
+        return this.provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public float getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
 
     public LocationData(){
     }
 
-    public LocationData(int id, String info){
+    public LocationData(long id, String formattedTime, double latitude, double longitude, double altitude, float accuracy, String provider, float speed){
+
         this.id = id;
-        this.info = info;
+
+        this.formattedTime = formattedTime;
+
+        this.latitude = latitude;
+
+        this.longitude = longitude;
+
+        this.altitude = altitude;
+
+        this.accuracy = accuracy;
+
+        this.provider = provider;
+
+        this.speed = speed;
+
     }
 
     public LocationData(LocationData locationData){
 
         this.id = locationData.getId();
-        this.info = locationData.getInfo();
+
+        this.formattedTime = locationData.getFormattedTime();
+
+        this.latitude = locationData.getLatitude();
+
+        this.longitude = locationData.getLongitude();
+
+        this.altitude = locationData.getAltitude();
+
+        this.accuracy = locationData.getAccuracy();
+
+        this.provider = locationData.getProvider();
+
+        this.speed = locationData.getSpeed();
     }
 
 }

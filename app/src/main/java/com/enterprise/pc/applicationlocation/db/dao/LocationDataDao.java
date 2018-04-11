@@ -21,7 +21,10 @@ public interface LocationDataDao {
     LiveData<List<LocationData>> loadAllLocationData();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<LocationData> locationData);
+    void insertAll(List<LocationData> locationDataList);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(LocationData locationData);
 
     @Query("select * from locationdata where id = :entityId")
     LiveData<LocationData> loadLocationData(int entityId);

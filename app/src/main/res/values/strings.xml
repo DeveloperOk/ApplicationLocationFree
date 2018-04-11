@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Application Location</string>
 
+    <string name="firstLineDefaultText">Test Successful!</string>
+    <string name="secondLineDefaultText">Ready!</string>
+
     <string name="button_start">Start</string>
+    <string name="button_stop">Stop</string>
+
+    <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS zzzz EEEE</string>
+
 </resources>
