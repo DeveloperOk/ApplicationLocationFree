@@ -4,9 +4,8 @@ import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,8 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,15 +32,15 @@ import java.util.Date;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback{
+public class MainActivity extends AppCompatActivity{
 
     Button buttonStart;
     Button buttonStop;
+    Button buttonGraph;
+
     TextView textViewTextToDisplayLineFirst;
     TextView textViewTextToDisplayLineSecond;
     LocationDataViewModel locationDataViewModel;
-    SurfaceView surfaceView;
-
 
     int count = 1;
 
@@ -69,11 +66,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         textViewTextToDisplayLineSecond = (TextView) findViewById(R.id.textViewTextToDisplayLineSecond);
         buttonStart = (Button)findViewById(R.id.buttonStart);
         buttonStop = (Button)findViewById(R.id.buttonStop);
+        buttonGraph = (Button)findViewById(R.id.buttonGraph);
 
         locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
-
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
-        surfaceView.getHolder().addCallback(this);
 
         addListeners();
 
@@ -100,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         addStartButtonListener();
         addStopButtonListener();
+        addGraphButtonListener();
     }
 
     private void addDataListeners() {
@@ -113,10 +109,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onChanged(@Nullable final List<LocationData> locationDataList) {
 
-                drawGraph(locationDataList);
-
                 if(locationDataList != null && !locationDataList.isEmpty()){
-
 
                     int sizeOfLocationDataList = locationDataList.size();
                     LocationData locationDataElement = locationDataList.get(sizeOfLocationDataList-1);
@@ -151,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
 
-
     private void addStartButtonListener() {
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -163,177 +155,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
 
-    }
-
-    private void drawGraph(List<LocationData> locationDataList) {
-
-        if(surfaceView != null) {
-
-            SurfaceHolder holder = surfaceView.getHolder();
-
-            if (holder != null) {
-
-                Canvas canvas = holder.lockCanvas();
-
-                Paint paint = new Paint();
-                paint.setARGB(255, 0, 255, 0);
-                paint.setTextSize(32);
-
-                executors.mainThread().execute(() -> {
-
-                    if (canvas != null) {
-
-                        int widthOfCanvas = canvas.getWidth();
-                        int heightOfCanvas = canvas.getHeight();
-
-                        if (locationDataList != null && !locationDataList.isEmpty()) {
-
-                            ExtremumValues extremumValuesOfLatitude = getMaxAndMinOfLatitude(locationDataList);
-                            ExtremumValues extremumValuesOfLongitude = getMaxAndMinOfLongitude(locationDataList);
-
-                            double scaleFactorOfLatitude =
-                                    Math.floor(heightOfCanvas /
-                                            (extremumValuesOfLatitude.getMaxValue() - extremumValuesOfLatitude.getMinValue()));
-
-                            double scaleFactorOfLongitude =
-                                    Math.floor(widthOfCanvas /
-                                            (extremumValuesOfLongitude.getMaxValue() - extremumValuesOfLongitude.getMinValue()));
-
-                            int sizeOfLocationDataList = locationDataList.size();
-
-                            float[] pts = new float[2 * sizeOfLocationDataList];
-
-                            int index = 0;
-
-                            double minValueOfLongitude = extremumValuesOfLongitude.getMinValue();
-                            double minValueOfLatitude = extremumValuesOfLatitude.getMinValue();
-
-                            for (LocationData locationData : locationDataList) {
-
-                                if (locationData != null) {
-
-                                    pts[index] = (float) ((locationData.getLongitude() - minValueOfLongitude) * scaleFactorOfLongitude);
-                                    index++;
-
-                                    pts[index] = (float) ((locationData.getLatitude() - minValueOfLatitude) * scaleFactorOfLatitude);
-                                    pts[index] = heightOfCanvas - pts[index];
-
-                                    index++;
-
-                                }
-
-                            }
-
-                            canvas.drawLines(pts, paint);
-
-                            canvas.drawText("Latitude Values:", 450, 200, paint);
-                            String tempText = "Min: " + extremumValuesOfLatitude.getMinValue();
-                            canvas.drawText(tempText, 450, 240, paint);
-                            tempText = "Max: " + extremumValuesOfLatitude.getMaxValue();
-                            canvas.drawText(tempText, 450, 280, paint);
-
-                            canvas.drawText("Longitude Values:", 450, 320, paint);
-                            tempText = "Min: " + extremumValuesOfLongitude.getMinValue();
-                            canvas.drawText(tempText, 450, 360, paint);
-                            tempText = "Max: " + extremumValuesOfLongitude.getMaxValue();
-                            canvas.drawText(tempText, 450, 400, paint);
-
-                        }
-
-                        canvas.drawText("Test Successful!", 50, 200, paint);
-
-                        holder.unlockCanvasAndPost(canvas);
-
-                    }
-
-                });
-
-            }
-        }
-
-    }
-
-
-    private ExtremumValues getMaxAndMinOfLatitude(List<LocationData> locationDataList){
-
-        ExtremumValues extremumValues = new ExtremumValues();
-
-        double maxValue = -1000;
-        double minValue = 1000;
-
-        if(locationDataList != null && !locationDataList.isEmpty()) {
-
-            for (LocationData locationData : locationDataList) {
-
-                if(locationData != null){
-
-                    double tempLatitudeValue = locationData.getLatitude();
-
-                    if(tempLatitudeValue > maxValue){
-                        maxValue = tempLatitudeValue;
-                    }
-
-                    if(tempLatitudeValue < minValue){
-                        minValue = tempLatitudeValue;
-                    }
-
-                }
-
-
-            }
-        }
-
-        extremumValues.setMaxValue(maxValue);
-        extremumValues.setMinValue(minValue);
-
-        return extremumValues;
-    }
-
-    private ExtremumValues getMaxAndMinOfLongitude(List<LocationData> locationDataList){
-
-        ExtremumValues extremumValues = new ExtremumValues();
-
-        double maxValue = -1000;
-        double minValue = 1000;
-
-        if(locationDataList != null && !locationDataList.isEmpty()) {
-
-            for (LocationData locationData : locationDataList) {
-
-                if(locationData != null){
-
-                    double tempLongitudeValue = locationData.getLongitude();
-
-                    if(tempLongitudeValue > maxValue){
-                        maxValue = tempLongitudeValue;
-                    }
-
-                    if(tempLongitudeValue < minValue){
-                        minValue = tempLongitudeValue;
-                    }
-
-                }
-
-
-            }
-        }
-
-        extremumValues.setMaxValue(maxValue);
-        extremumValues.setMinValue(minValue);
-
-        return extremumValues;
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
 
@@ -349,6 +170,22 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         });
 
     }
+
+
+    private void addGraphButtonListener() {
+
+        buttonGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                Intent intent = new Intent(getApplicationContext(), LocationGraphActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
 
     private void addListenerForGPS() {
 
@@ -374,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
 
-
     private void checkPermissionAndRegisterListenerForGPS() {
 
         // Here, thisActivity is the current activity
@@ -398,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     }
 
+
     private void registerListenerForGPS() {
 
         if (ContextCompat.checkSelfPermission(this,
@@ -409,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
     }
+
 
     private void removeListenerForGPS() {
 
@@ -471,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
+
     private void initializeLocationDataOutputFile(){
 
         if(isExternalStorageWritable()){
@@ -487,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     }
 
+
     private void closeLocationDataOutputFile(){
 
         try {
@@ -497,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     }
 
-    private void writeDataToFile(LocationData locationData){
 
+    private void writeDataToFile(LocationData locationData){
 
         if(locationData != null){
 
@@ -516,10 +356,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 //e.printStackTrace();
             }
 
-
         }
 
     }
+
 
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
@@ -529,6 +369,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
         return false;
     }
+
 
     /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {

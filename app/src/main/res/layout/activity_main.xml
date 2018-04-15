@@ -11,11 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/firstLineDefaultText"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
+        android:layout_marginTop="80dp" />
 
     <TextView
         android:id="@+id/textViewTextToDisplayLineSecond"
@@ -23,43 +22,42 @@
         android:layout_height="wrap_content"
         android:text="@string/secondLineDefaultText"
         app:layout_constraintTop_toBottomOf="@+id/textViewTextToDisplayLineFirst"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.01" />
+        android:layout_marginTop="1dp" />
 
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_start"
-        android:background="@color/colorButtonStart"
+        android:background="@color/colorButton"
         app:layout_constraintTop_toBottomOf="@+id/textViewTextToDisplayLineSecond"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        android:layout_marginTop="60dp" />
 
     <Button
         android:id="@+id/buttonStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_stop"
-        android:background="@color/colorButtonStart"
+        android:background="@color/colorButton"
         app:layout_constraintTop_toBottomOf="@+id/buttonStart"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        android:layout_marginTop="40dp" />
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="300dp"
-        android:layout_height="180dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/buttonGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_graph"
+        android:background="@color/colorButton"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
+        android:layout_marginTop="40dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -9,4 +9,7 @@
 
     <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS zzzz EEEE</string>
 
+    <string name="locationGraphActivityTitle">Location Graph</string>
+    <string name="button_graph">Graph</string>
+
 </resources>
