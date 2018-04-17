@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
 import com.enterprise.pc.applicationlocation.vm.LocationDataViewModel;
@@ -25,6 +26,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     DataRepository dataRepository;
 
+    TextView textViewMinLongitudeLineTwo;
+    TextView textViewMaxLongitudeLineTwo;
+    TextView textViewMinLatitudeLineTwo;
+    TextView textViewMaxLatitudeLineTwo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         surfaceView = (SurfaceView) findViewById(R.id.surfaceViewGraph);
         surfaceView.getHolder().addCallback(this);
+
+        textViewMinLongitudeLineTwo = (TextView) findViewById(R.id.textViewMinLongitudeLineTwo);
+        textViewMaxLongitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLongitudeLineTwo);
+        textViewMinLatitudeLineTwo = (TextView) findViewById(R.id.textViewMinLatitudeLineTwo);
+        textViewMaxLatitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLatitudeLineTwo);
 
         addListeners();
 
@@ -149,20 +160,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                             }
 
+                            setGraphLabels(extremumValuesOfLongitude, extremumValuesOfLatitude);
+
                             canvas.drawLines(pts, paint);
-
-                            canvas.drawText("Latitude Values:", 450, 200, paint);
-                            String tempText = "Min: " + extremumValuesOfLatitude.getMinValue();
-                            canvas.drawText(tempText, 450, 240, paint);
-                            tempText = "Max: " + extremumValuesOfLatitude.getMaxValue();
-                            canvas.drawText(tempText, 450, 280, paint);
-
-                            canvas.drawText("Longitude Values:", 450, 320, paint);
-                            tempText = "Min: " + extremumValuesOfLongitude.getMinValue();
-                            canvas.drawText(tempText, 450, 360, paint);
-                            tempText = "Max: " + extremumValuesOfLongitude.getMaxValue();
-                            canvas.drawText(tempText, 450, 400, paint);
-
+                            
                             canvas.drawText("Test Successful!", 50, 200, paint);
 
                             holder.unlockCanvasAndPost(canvas);
@@ -173,6 +174,30 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                 }
             }
+
+        }
+
+    }
+
+    private void setGraphLabels(ExtremumValues extremumValuesOfLongitude, ExtremumValues extremumValuesOfLatitude) {
+
+        if(extremumValuesOfLongitude != null){
+
+            Double minValueOfLongitude = extremumValuesOfLongitude.getMinValue();
+            textViewMinLongitudeLineTwo.setText(Double.toString(minValueOfLongitude));
+
+            Double maxValueOfLongitude = extremumValuesOfLongitude.getMaxValue();
+            textViewMaxLongitudeLineTwo.setText(Double.toString(maxValueOfLongitude));
+
+        }
+
+        if(extremumValuesOfLatitude != null){
+
+            Double minValueOfLatitude = extremumValuesOfLatitude.getMinValue();
+            textViewMinLatitudeLineTwo.setText(Double.toString(minValueOfLatitude));
+
+            Double maxValueOfLatitude = extremumValuesOfLatitude.getMaxValue();
+            textViewMaxLatitudeLineTwo.setText(Double.toString(maxValueOfLatitude));
 
         }
 

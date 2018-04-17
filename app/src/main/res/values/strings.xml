@@ -12,4 +12,17 @@
     <string name="locationGraphActivityTitle">Location Graph</string>
     <string name="button_graph">Graph</string>
 
+    <string name="graph_latitude_label">Latitude</string>
+    <string name="graph_longitude_label">Longitude</string>
+    <string name="graph_empty_string"></string>
+
+    <string name="graph_constant_width_string_longitude">AA</string>
+    <string name="graph_constant_width_string_latitude">AA</string>
+
+    <string name="graph_longitude_min_value">Longitude Min Value:</string>
+    <string name="graph_longitude_max_value">Longitude Max Value:</string>
+
+    <string name="graph_latitude_min_value">Latitude Min Value:</string>
+    <string name="graph_latitude_max_value">Latitude Max Value:</string>
+
 </resources>
