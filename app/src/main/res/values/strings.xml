@@ -25,4 +25,10 @@
     <string name="graph_latitude_min_value">Latitude Min Value:</string>
     <string name="graph_latitude_max_value">Latitude Max Value:</string>
 
+    <string name="controls_year_label">Year</string>
+    <string name="controls_month_label">Month</string>
+    <string name="controls_day_label">Day</string>
+    <string name="controls_hour_label">Hour</string>
+    <string name="controls_minute_label">Minute</string>
+
 </resources>

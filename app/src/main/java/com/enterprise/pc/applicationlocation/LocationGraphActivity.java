@@ -2,6 +2,7 @@ package com.enterprise.pc.applicationlocation;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -49,6 +50,8 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         textViewMaxLongitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLongitudeLineTwo);
         textViewMinLatitudeLineTwo = (TextView) findViewById(R.id.textViewMinLatitudeLineTwo);
         textViewMaxLatitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLatitudeLineTwo);
+
+        DataBindingUtil.inflate(getLayoutInflater(), R.layout.select_date_and_time_layout, findViewById(R.id.constraintLayoutControlsPart), true);
 
         addListeners();
 

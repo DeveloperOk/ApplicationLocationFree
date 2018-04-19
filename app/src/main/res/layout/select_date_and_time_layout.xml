@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/appLocationNumberPickerYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/app_location_number_picker_layout"
+            app:textLabel="@{@string/controls_year_label}" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/appLocationNumberPickerMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/app_location_number_picker_layout"
+            app:textLabel="@{@string/controls_month_label}" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/appLocationNumberPickerDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/app_location_number_picker_layout"
+            app:textLabel="@{@string/controls_day_label}" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/appLocationNumberPickerHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/app_location_number_picker_layout"
+            app:textLabel="@{@string/controls_hour_label}" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/appLocationNumberPickerMinute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/app_location_number_picker_layout"
+            app:textLabel="@{@string/controls_minute_label}" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</layout>
