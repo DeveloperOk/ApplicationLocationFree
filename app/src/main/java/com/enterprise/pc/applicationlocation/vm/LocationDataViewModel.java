@@ -15,6 +15,7 @@ import java.util.List;
 
 public class LocationDataViewModel extends ViewModel {
 
+    
     private LiveData<List<LocationData>> locationData = new MutableLiveData<List<LocationData>>();
 
     public LocationDataViewModel(){
@@ -35,5 +36,6 @@ public class LocationDataViewModel extends ViewModel {
 
         this.locationData = locationData;
     }
+
 
 }
