@@ -80,7 +80,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        
+
         addDataListeners();
         setLimitsOfControls();
         addNumberPickerListenersOfStartTime();
@@ -163,6 +163,17 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
             }
         });
 
+        ((NumberPicker) findViewById(R.id.controlsStartTime).findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int oldValue, int newValue) {
+
+                startDate.setSecond(newValue);
+                updateGraph();
+
+            }
+        });
+
     }
 
     private void addNumberPickerListenersOfEndTime() {
@@ -222,6 +233,17 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
             }
         });
 
+        ((NumberPicker) findViewById(R.id.controlsEndTime).findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int oldValue, int newValue) {
+
+                endDate.setSecond(newValue);
+                updateGraph();
+
+            }
+        });
+
     }
 
     private void addDataListeners() {
@@ -260,13 +282,15 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                     Integer.toString(startDate.getMonth()) + seperatorStr +
                     Integer.toString(startDate.getDay()) + seperatorStr +
                     Integer.toString(startDate.getHour()) + seperatorStr +
-                    Integer.toString(startDate.getMinute());
+                    Integer.toString(startDate.getMinute()) + seperatorStr +
+                    Integer.toString(startDate.getSecond());
 
             String endDateStr = Integer.toString(endDate.getYear()) + seperatorStr +
                     Integer.toString(endDate.getMonth()) + seperatorStr +
                     Integer.toString(endDate.getDay()) + seperatorStr +
                     Integer.toString(endDate.getHour()) + seperatorStr +
-                    Integer.toString(endDate.getMinute());
+                    Integer.toString(endDate.getMinute()) + seperatorStr +
+                    Integer.toString(endDate.getSecond());
 
             DateFormat dateFormat = new SimpleDateFormat(getString(R.string.controls_time_format_str_to_date));
 
@@ -464,6 +488,13 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         ((NumberPicker) viewById.findViewById(R.id.appLocationNumberPickerMinute)
                 .findViewById(R.id.numberPicker)).setMinValue(Integer.parseInt(getString(R.string.controls_minute_min)));
 
+        //Second
+        ((NumberPicker) viewById.findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setMaxValue(Integer.parseInt(getString(R.string.controls_second_max)));
+
+        ((NumberPicker) viewById.findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setMinValue(Integer.parseInt(getString(R.string.controls_second_min)));
+
     }
 
 
@@ -534,6 +565,17 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerMinute)
                 .findViewById(R.id.numberPicker)).setValue(endMinute);
         endDate.setMinute(endMinute);
+
+        //Second
+        int startSecond = Integer.parseInt(oldestDateFormattedSplitted[5]);
+        ((NumberPicker) viewByIdStartTime.findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setValue(startSecond);
+        startDate.setSecond(startSecond);
+
+        int endSecond = Integer.parseInt(newestDateFormattedSplitted[5]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerSecond)
+                .findViewById(R.id.numberPicker)).setValue(endSecond);
+        endDate.setSecond(endSecond);
 
     }
 

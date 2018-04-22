@@ -98,6 +98,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
 
+            <include android:id="@+id/appLocationNumberPickerSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_second_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
         </LinearLayout>
 
     </LinearLayout>
