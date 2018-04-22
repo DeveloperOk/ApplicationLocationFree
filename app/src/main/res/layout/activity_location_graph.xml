@@ -46,7 +46,7 @@
             android:background="@color/colorWhite"
             app:layout_constraintDimensionRatio="1:1"
             android:gravity="top|center"
-            android:text="@string/graph_longitude_min_value"
+            android:text="@string/graph_longitude_min_header"
             android:textColor="@color/colorBlack"
             android:rotation="270"
             app:layout_constraintTop_toTopOf="parent"
@@ -77,7 +77,7 @@
             android:background="@color/colorWhite"
             app:layout_constraintDimensionRatio="1:1"
             android:gravity="top|center"
-            android:text="@string/graph_longitude_label"
+            android:text="@string/graph_longitude_min"
             android:textColor="@color/colorBlack"
             android:rotation="270"
             app:layout_constraintTop_toTopOf="parent"
@@ -119,7 +119,7 @@
                 android:id="@+id/textViewMaxLatitudeLineOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_max_value"
+                android:text="@string/graph_latitude_max_header"
                 android:textColor="@color/colorBlack"
                 android:gravity="top|center"
                 android:background="@color/colorWhite"
@@ -144,7 +144,7 @@
                 android:id="@+id/textViewMaxLatitudeLineTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_label"
+                android:text="@string/graph_latitude_max"
                 android:textColor="@color/colorBlack"
                 android:gravity="top|center"
                 android:background="@color/colorWhite"
@@ -180,7 +180,7 @@
                 android:id="@+id/textViewMinLatitudeLineOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_min_value"
+                android:text="@string/graph_latitude_min_header"
                 android:textColor="@color/colorBlack"
                 android:gravity="top|center"
                 android:background="@color/colorWhite"
@@ -206,7 +206,7 @@
                 android:id="@+id/textViewMinLatitudeLineTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_label"
+                android:text="@string/graph_latitude_min"
                 android:textColor="@color/colorBlack"
                 android:gravity="top|center"
                 android:background="@color/colorWhite"
@@ -245,7 +245,7 @@
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
             android:rotation="270"
-            android:text="@string/graph_longitude_max_value"
+            android:text="@string/graph_longitude_max_header"
             android:textColor="@color/colorBlack"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -278,7 +278,7 @@
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
             android:rotation="270"
-            android:text="@string/graph_longitude_label"
+            android:text="@string/graph_longitude_max"
             android:textColor="@color/colorBlack"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -336,6 +336,33 @@
                     tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity">
 
 
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/controlsStartTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/controlsEndTime"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp" >
+
+
+                    </android.support.constraint.ConstraintLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/controlsEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/controlsStartTime"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp" >
+
+
+                    </android.support.constraint.ConstraintLayout>
 
 
                 </android.support.constraint.ConstraintLayout>

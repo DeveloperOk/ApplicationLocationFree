@@ -4,85 +4,102 @@
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp" >
+        android:layout_marginBottom="10dp" >
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/textViewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/border_line" />
 
-        <include android:id="@+id/appLocationNumberPickerYear"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/app_location_number_picker_layout"
-            app:textLabel="@{@string/controls_year_label}"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp" >
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <include android:id="@+id/appLocationNumberPickerMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/app_location_number_picker_layout"
-            app:textLabel="@{@string/controls_month_label}"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            <include android:id="@+id/appLocationNumberPickerYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_year_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <include android:id="@+id/appLocationNumberPickerDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/app_location_number_picker_layout"
-            app:textLabel="@{@string/controls_day_label}"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            <include android:id="@+id/appLocationNumberPickerMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_month_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <include android:id="@+id/appLocationNumberPickerHour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/app_location_number_picker_layout"
-            app:textLabel="@{@string/controls_hour_label}"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            <include android:id="@+id/appLocationNumberPickerDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_day_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <include android:id="@+id/appLocationNumberPickerMinute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/app_location_number_picker_layout"
-            app:textLabel="@{@string/controls_minute_label}"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            <include android:id="@+id/appLocationNumberPickerHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_hour_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include android:id="@+id/appLocationNumberPickerMinute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/app_location_number_picker_layout"
+                app:textLabel="@{@string/controls_minute_label}"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
 
 </layout>

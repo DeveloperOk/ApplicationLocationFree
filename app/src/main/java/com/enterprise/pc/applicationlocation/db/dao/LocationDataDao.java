@@ -27,9 +27,18 @@ public interface LocationDataDao {
     void insert(LocationData locationData);
 
     @Query("select * from locationdata where id = :entityId")
-    LiveData<LocationData> loadLocationData(int entityId);
+    LiveData<LocationData> loadLocationData(long entityId);
 
     @Query("select * from locationdata where id = :entityId")
-    LocationData loadLocationDataSync(int entityId);
+    LocationData loadLocationDataSync(long entityId);
+
+    @Query("select min(id) from locationdata")
+    long getOldestTimeMsSync();
+
+    @Query("select max(id) from locationdata")
+    long getNewestTimeMsSync();
+
+    @Query("select * from locationdata where id >= :startId and id <= :endId")
+    List<LocationData> getLocationDataBetweenStartAndEndTimeSync(long startId, long endId);
 
 }
