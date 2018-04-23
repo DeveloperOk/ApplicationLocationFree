@@ -16,13 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@{textLabel}" />
+            android:text="@{textLabel}"
+            android:background="@drawable/app_loc_number_picker_textview" />
 
         <NumberPicker
             android:id="@+id/numberPicker"
+            android:theme="@style/AppTheme.AppLocNumberPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/border_line"/>
+            android:background="@drawable/app_loc_number_picker"/>
 
     </LinearLayout>
 
