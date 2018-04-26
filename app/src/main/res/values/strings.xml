@@ -7,7 +7,9 @@
     <string name="button_start">Start</string>
     <string name="button_stop">Stop</string>
 
-    <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS zzzz EEEE</string>
+    <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS--zzzz EEEE</string>
+    <string name="str_old_value">--</string>
+    <string name="str_new_value">"\n   "</string>
 
     <string name="locationGraphActivityTitle">Location Graph</string>
     <string name="button_graph">Graph</string>
@@ -62,7 +64,14 @@
     <string name="test_successful_label">Test Successful!</string>
     <string name="no_data_to_display_label">No data to display!</string>
 
-
-
+    <string name="time_label">Time</string>
+    <string name="latitude_label">Latitude (Degree)</string>
+    <string name="longitude_label">Longitude (Degree)</string>
+    <string name="altitude_label">Altitude</string>
+    <string name="speed_label">Speed</string>
+    <string name="accuracy_label">Accuracy</string>
+    <string name="bearing_label">Bearing</string>
+    <string name="provider_label">Provider</string>
+    <string name="punctuation_mark_colon_and_space">":  "</string>
 
 </resources>

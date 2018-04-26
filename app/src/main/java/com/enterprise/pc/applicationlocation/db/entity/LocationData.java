@@ -35,6 +35,20 @@ public class LocationData {
     @ColumnInfo(name = "speed")
     private float speed;
 
+    @ColumnInfo(name = "bearing")
+    private float bearing;
+
+    @ColumnInfo(name = "verticalAccuracyMeters")
+    private float verticalAccuracyMeters;
+
+    @ColumnInfo(name = "speedAccuracyMetersPerSecond")
+    private float speedAccuracyMetersPerSecond;
+
+    @ColumnInfo(name = "bearingAccuracyDegrees")
+    private float bearingAccuracyDegrees;
+
+    @ColumnInfo(name = "information")
+    private String information;
 
     public long getId() {
         return this.id;
@@ -100,11 +114,53 @@ public class LocationData {
         this.speed = speed;
     }
 
+    public float getBearing() {
+        return bearing;
+    }
+
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
+    }
+
+    public float getVerticalAccuracyMeters() {
+        return verticalAccuracyMeters;
+    }
+
+    public void setVerticalAccuracyMeters(float verticalAccuracyMeters) {
+        this.verticalAccuracyMeters = verticalAccuracyMeters;
+    }
+
+    public float getSpeedAccuracyMetersPerSecond() {
+        return speedAccuracyMetersPerSecond;
+    }
+
+    public void setSpeedAccuracyMetersPerSecond(float speedAccuracyMetersPerSecond) {
+        this.speedAccuracyMetersPerSecond = speedAccuracyMetersPerSecond;
+    }
+
+    public float getBearingAccuracyDegrees() {
+        return bearingAccuracyDegrees;
+    }
+
+    public void setBearingAccuracyDegrees(float bearingAccuracyDegrees) {
+        this.bearingAccuracyDegrees = bearingAccuracyDegrees;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
 
     public LocationData(){
     }
 
-    public LocationData(long id, String formattedTime, double latitude, double longitude, double altitude, float accuracy, String provider, float speed){
+    public LocationData(long id, String formattedTime, double latitude, double longitude,
+                        double altitude, float accuracy, String provider, float speed,
+                        float bearing, float verticalAccuracyMeters, float speedAccuracyMetersPerSecond, float bearingAccuracyDegrees,
+                        String information){
 
         this.id = id;
 
@@ -121,6 +177,16 @@ public class LocationData {
         this.provider = provider;
 
         this.speed = speed;
+
+        this.bearing = bearing;
+
+        this.verticalAccuracyMeters = verticalAccuracyMeters;
+
+        this.speedAccuracyMetersPerSecond = speedAccuracyMetersPerSecond;
+
+        this.bearingAccuracyDegrees = bearingAccuracyDegrees;
+
+        this.information = information;
 
     }
 
@@ -141,6 +207,17 @@ public class LocationData {
         this.provider = locationData.getProvider();
 
         this.speed = locationData.getSpeed();
+
+        this.bearing = locationData.getBearing();
+
+        this.verticalAccuracyMeters = locationData.getVerticalAccuracyMeters();
+
+        this.speedAccuracyMetersPerSecond = locationData.getSpeedAccuracyMetersPerSecond();
+
+        this.bearingAccuracyDegrees = locationData.getBearingAccuracyDegrees();
+
+        this.information = locationData.getInformation();
+
     }
 
 }

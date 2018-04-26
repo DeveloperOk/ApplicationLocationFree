@@ -9,72 +9,244 @@
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/scrollViewOne"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:context="com.enterprise.pc.applicationlocation.MainActivity" >
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context="com.enterprise.pc.applicationlocation.MainActivity">
-
-        <TextView
-            android:id="@+id/textViewTextToDisplayLineFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/firstLineDefaultText"
+            android:id="@+id/horizontalScrollViewOne"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="80dp" />
-
-        <TextView
-            android:id="@+id/textViewTextToDisplayLineSecond"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/secondLineDefaultText"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTextToDisplayLineFirst"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="1dp" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/buttonStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_start"
-            android:background="@color/colorButton"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTextToDisplayLineSecond"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="60dp" />
-
-        <Button
-            android:id="@+id/buttonStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_stop"
-            android:background="@color/colorButton"
-            app:layout_constraintTop_toBottomOf="@+id/buttonStart"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="40dp" />
-
-        <Button
-            android:id="@+id/buttonGraph"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_graph"
-            android:background="@color/colorButton"
-            app:layout_constraintTop_toBottomOf="@+id/buttonStop"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="40dp" />
+            <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/constraintLayoutOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                tools:context="com.enterprise.pc.applicationlocation.MainActivity">
 
 
-        </android.support.constraint.ConstraintLayout>
+                <android.support.constraint.Barrier
+                    android:id="@+id/barrierForVerticalAlignment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="end"
+                    app:constraint_referenced_ids="textViewTimeLabel, textViewLatitudeLabel, textViewLongitudeLabel, textViewAltitudeLabel, textViewAccuracyLabel, textViewSpeedLabel, textViewBearingLabel, textViewProviderLabel" />
+
+                <TextView
+                    android:id="@+id/textViewTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/time_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewTimeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewTimeLabel" />
+
+                <TextView
+                    android:id="@+id/textViewLatitudeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/latitude_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewTimeValue" />
+
+                <TextView
+                    android:id="@+id/textViewLatitudeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewLatitudeLabel" />
+
+                <TextView
+                    android:id="@+id/textViewLongitudeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/longitude_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeValue" />
+
+                <TextView
+                    android:id="@+id/textViewLongitudeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewLongitudeLabel" />
+
+                <TextView
+                    android:id="@+id/textViewAltitudeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/altitude_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewLongitudeValue" />
+
+                <TextView
+                    android:id="@+id/textViewAltitudeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAltitudeLabel" />
+
+                <TextView
+                    android:id="@+id/textViewAccuracyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/accuracy_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAltitudeValue" />
+
+                <TextView
+                    android:id="@+id/textViewAccuracyValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAccuracyLabel" />
+
+                <TextView
+                    android:id="@+id/textViewSpeedLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/speed_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAccuracyValue" />
+
+                <TextView
+                    android:id="@+id/textViewSpeedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewSpeedLabel" />
+
+                <TextView
+                    android:id="@+id/textViewBearingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/bearing_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSpeedValue" />
+
+                <TextView
+                    android:id="@+id/textViewBearingValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewBearingLabel" />
+
+                <TextView
+                    android:id="@+id/textViewProviderLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/provider_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewBearingValue" />
+
+                <TextView
+                    android:id="@+id/textViewProviderValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/firstLineDefaultText"
+                    app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewProviderLabel" />
+
+                <Button
+                    android:id="@+id/buttonStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:background="@color/colorButton"
+                    android:text="@string/button_start"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewProviderLabel" />
+
+                <Button
+                    android:id="@+id/buttonStop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:background="@color/colorButton"
+                    android:text="@string/button_stop"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
+
+                <Button
+                    android:id="@+id/buttonGraph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:background="@color/colorButton"
+                    android:text="@string/button_graph"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
+
+
+
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonGraph" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+        </HorizontalScrollView>
 
     </ScrollView>
 
