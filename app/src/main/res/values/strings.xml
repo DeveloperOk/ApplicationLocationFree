@@ -6,6 +6,7 @@
 
     <string name="button_start">Start</string>
     <string name="button_stop">Stop</string>
+    <string name="button_export">Export</string>
 
     <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS--zzzz EEEE</string>
     <string name="str_old_value">--</string>
@@ -73,5 +74,15 @@
     <string name="bearing_label">Bearing</string>
     <string name="provider_label">Provider</string>
     <string name="punctuation_mark_colon_and_space">":  "</string>
+
+    <string name="data_export_activity_title">Data Export</string>
+    <string name="data_export_activity_button_export">Export</string>
+    <string name="file_name_for_data_export">"Location Data "</string>
+    <string name="date_format_for_data_export">yyyy MM dd HH mm ss SSS</string>
+    <string name="file_extension_for_data_export">".txt"</string>
+    <string name="data_export_progress_started">"Progress: Started"</string>
+    <string name="data_export_progress_completed">"Progress: Completed"</string>
+    <string name="data_export_progress">"Progress: "</string>
+    <string name="data_export_first_line">"index;id;formattedTime;latitude;longitude;altitude;accuracy;provider;speed;bearing;information\n"</string>
 
 </resources>

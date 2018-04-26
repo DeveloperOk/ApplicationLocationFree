@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity{
     Button buttonStart;
     Button buttonStop;
     Button buttonGraph;
+    Button buttonExport;
 
     TextView textViewTimeValue;
     TextView textViewLatitudeValue;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity{
         buttonStart = (Button)findViewById(R.id.buttonStart);
         buttonStop = (Button)findViewById(R.id.buttonStop);
         buttonGraph = (Button)findViewById(R.id.buttonGraph);
+        buttonExport = (Button)findViewById(R.id.buttonExport);
 
         locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
 
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity{
         addStartButtonListener();
         addStopButtonListener();
         addGraphButtonListener();
+        addExportButtonListener();
+
     }
 
     private void addDataListeners() {
@@ -232,6 +236,19 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private void addExportButtonListener() {
+
+        buttonExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                Intent intent = new Intent(getApplicationContext(), DataExportActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
 
     private void addListenerForGPS() {
 
