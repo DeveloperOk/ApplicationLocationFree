@@ -12,6 +12,7 @@ public class DateInformation {
     private int hour;
     private int minute;
     private int second;
+    private int millisecond;
 
     public int getYear() {
         return year;
@@ -59,6 +60,14 @@ public class DateInformation {
 
     public void setSecond(int second) {
         this.second = second;
+    }
+
+    public int getMillisecond() {
+        return millisecond;
+    }
+
+    public void setMillisecond(int millisecond) {
+        this.millisecond = millisecond;
     }
 
 }

@@ -106,14 +106,16 @@ public class DataExportActivity extends AppCompatActivity {
                     Integer.toString(startDate.getDay()) + separatorStr +
                     Integer.toString(startDate.getHour()) + separatorStr +
                     Integer.toString(startDate.getMinute()) + separatorStr +
-                    Integer.toString(startDate.getSecond());
+                    Integer.toString(startDate.getSecond()) + separatorStr +
+                    Integer.toString(startDate.getMillisecond());
 
             String endDateStr = Integer.toString(endDate.getYear()) + separatorStr +
                     Integer.toString(endDate.getMonth()) + separatorStr +
                     Integer.toString(endDate.getDay()) + separatorStr +
                     Integer.toString(endDate.getHour()) + separatorStr +
                     Integer.toString(endDate.getMinute()) + separatorStr +
-                    Integer.toString(endDate.getSecond());
+                    Integer.toString(endDate.getSecond()) + separatorStr +
+                    Integer.toString(endDate.getMillisecond());
 
             DateFormat dateFormat = new SimpleDateFormat(getString(R.string.controls_time_format_str_to_date));
 
@@ -577,6 +579,9 @@ public class DataExportActivity extends AppCompatActivity {
         ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerSecond)
                 .findViewById(R.id.numberPicker)).setValue(endSecond);
         endDate.setSecond(endSecond);
+
+        startDate.setMillisecond(0);
+        endDate.setMillisecond(999);
 
     }
 

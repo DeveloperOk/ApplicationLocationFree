@@ -280,21 +280,23 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         if(startDate !=null && endDate != null) {
 
-            String seperatorStr = getString(R.string.controls_string_merge_str);
+            String separatorStr = getString(R.string.controls_string_merge_str);
 
-            String startDateStr = Integer.toString(startDate.getYear()) + seperatorStr +
-                    Integer.toString(startDate.getMonth()) + seperatorStr +
-                    Integer.toString(startDate.getDay()) + seperatorStr +
-                    Integer.toString(startDate.getHour()) + seperatorStr +
-                    Integer.toString(startDate.getMinute()) + seperatorStr +
-                    Integer.toString(startDate.getSecond());
+            String startDateStr = Integer.toString(startDate.getYear()) + separatorStr +
+                    Integer.toString(startDate.getMonth()) + separatorStr +
+                    Integer.toString(startDate.getDay()) + separatorStr +
+                    Integer.toString(startDate.getHour()) + separatorStr +
+                    Integer.toString(startDate.getMinute()) + separatorStr +
+                    Integer.toString(startDate.getSecond()) + separatorStr +
+                    Integer.toString(startDate.getMillisecond());
 
-            String endDateStr = Integer.toString(endDate.getYear()) + seperatorStr +
-                    Integer.toString(endDate.getMonth()) + seperatorStr +
-                    Integer.toString(endDate.getDay()) + seperatorStr +
-                    Integer.toString(endDate.getHour()) + seperatorStr +
-                    Integer.toString(endDate.getMinute()) + seperatorStr +
-                    Integer.toString(endDate.getSecond());
+            String endDateStr = Integer.toString(endDate.getYear()) + separatorStr +
+                    Integer.toString(endDate.getMonth()) + separatorStr +
+                    Integer.toString(endDate.getDay()) + separatorStr +
+                    Integer.toString(endDate.getHour()) + separatorStr +
+                    Integer.toString(endDate.getMinute()) + separatorStr +
+                    Integer.toString(endDate.getSecond()) + separatorStr +
+                    Integer.toString(endDate.getMillisecond());
 
             DateFormat dateFormat = new SimpleDateFormat(getString(R.string.controls_time_format_str_to_date));
 
@@ -581,6 +583,8 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(endSecond);
         endDate.setSecond(endSecond);
 
+        startDate.setMillisecond(0);
+        endDate.setMillisecond(999);
     }
 
 

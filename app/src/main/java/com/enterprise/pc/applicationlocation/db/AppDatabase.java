@@ -92,10 +92,16 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public static void insert(final AppDatabase database, final LocationData locationData) {
-        database.runInTransaction(() -> {
-            database.locationDataDao().insert(locationData);
 
-        });
+        if(database != null && locationData != null){
+
+            database.runInTransaction(() -> {
+                database.locationDataDao().insert(locationData);
+
+            });
+
+        }
+
     }
 
     public LiveData<Boolean> getDatabaseCreated() {

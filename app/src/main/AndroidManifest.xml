@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LocationGraphActivity" />
-        <activity android:name=".DataExportActivity"></activity>
+        <activity android:name=".DataExportActivity" />
+        <activity android:name=".DataAddInformationActivity"></activity>
     </application>
 
 </manifest>

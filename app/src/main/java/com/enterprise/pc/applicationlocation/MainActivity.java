@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     Button buttonStop;
     Button buttonGraph;
     Button buttonExport;
+    Button buttonAdd;
 
     TextView textViewTimeValue;
     TextView textViewLatitudeValue;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity{
     File fileLocationDataOutput;
     FileOutputStream fileOutputStreamLocationDataOutput;
 
+    LocationData currentLocationData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,23 @@ public class MainActivity extends AppCompatActivity{
 
         executors = new AppExecutors();
 
+        initializeTextViews();
+
+        buttonStart = (Button)findViewById(R.id.buttonStart);
+        buttonStop = (Button)findViewById(R.id.buttonStop);
+        buttonGraph = (Button)findViewById(R.id.buttonGraph);
+        buttonExport = (Button)findViewById(R.id.buttonExport);
+        buttonAdd = (Button)findViewById(R.id.buttonAdd);
+
+        locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
+
+        addListeners();
+
+        initializeLocationDataOutputFile();
+
+    }
+
+    private void initializeTextViews() {
         textViewTimeValue = (TextView) findViewById(R.id.textViewTimeValue);
         textViewLatitudeValue = (TextView) findViewById(R.id.textViewLatitudeValue);
         textViewLongitudeValue = (TextView) findViewById(R.id.textViewLongitudeValue);
@@ -78,18 +98,6 @@ public class MainActivity extends AppCompatActivity{
         textViewSpeedValue = (TextView) findViewById(R.id.textViewSpeedValue);
         textViewBearingValue = (TextView) findViewById(R.id.textViewBearingValue);
         textViewProviderValue = (TextView) findViewById(R.id.textViewProviderValue);
-
-        buttonStart = (Button)findViewById(R.id.buttonStart);
-        buttonStop = (Button)findViewById(R.id.buttonStop);
-        buttonGraph = (Button)findViewById(R.id.buttonGraph);
-        buttonExport = (Button)findViewById(R.id.buttonExport);
-
-        locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
-
-        addListeners();
-
-        initializeLocationDataOutputFile();
-
     }
 
     @Override
@@ -113,6 +121,7 @@ public class MainActivity extends AppCompatActivity{
         addStopButtonListener();
         addGraphButtonListener();
         addExportButtonListener();
+        addAddButtonListener();
 
     }
 
@@ -132,57 +141,8 @@ public class MainActivity extends AppCompatActivity{
                     int sizeOfLocationDataList = locationDataList.size();
                     LocationData locationDataElement = locationDataList.get(sizeOfLocationDataList-1);
 
-                    if(locationDataElement != null){
-
-                        String formattedTime = locationDataElement.getFormattedTime();
-
-                        if(formattedTime != null){
-                            textViewTimeValue.setText(getString(R.string.punctuation_mark_colon_and_space) + formattedTime.replace(getString(R.string.str_old_value), getString(R.string.str_new_value)));
-                        }
-
-                        String latitude = Double.toString(locationDataElement.getLatitude());
-
-                        if(latitude != null){
-                            textViewLatitudeValue.setText(getString(R.string.punctuation_mark_colon_and_space) + latitude);
-                        }
-
-                        String longitude = Double.toString(locationDataElement.getLongitude());
-
-                        if(longitude != null){
-                            textViewLongitudeValue.setText(getString(R.string.punctuation_mark_colon_and_space) + longitude);
-                        }
-
-                        String altitude = Double.toString(locationDataElement.getAltitude());
-
-                        if(altitude != null){
-                            textViewAltitudeValue.setText(getString(R.string.punctuation_mark_colon_and_space) + altitude);
-                        }
-
-                        String speed = Double.toString(locationDataElement.getSpeed());
-
-                        if(speed != null){
-                            textViewSpeedValue.setText(getString(R.string.punctuation_mark_colon_and_space) + speed);
-                        }
-
-                        String accuracy = Double.toString(locationDataElement.getAccuracy());
-
-                        if(accuracy != null){
-                            textViewAccuracyValue.setText(getString(R.string.punctuation_mark_colon_and_space) + accuracy);
-                        }
-
-                        String bearing = Double.toString(locationDataElement.getBearing());
-
-                        if(bearing != null){
-                            textViewBearingValue.setText(getString(R.string.punctuation_mark_colon_and_space) + bearing);
-                        }
-
-                        String provider = locationDataElement.getProvider();
-
-                        if(provider != null){
-                            textViewProviderValue.setText(getString(R.string.punctuation_mark_colon_and_space) + provider);
-                        }
-
-                    }
+                    currentLocationData = locationDataElement;
+                    setTextsOfTextViews(locationDataElement);
 
                 }
 
@@ -190,6 +150,62 @@ public class MainActivity extends AppCompatActivity{
         };
 
         locationDataViewModel.getLocationData().observe( this, locationDataListObserver);
+
+    }
+
+    private void setTextsOfTextViews(LocationData locationDataElement) {
+
+        if(locationDataElement != null){
+
+            String formattedTime = locationDataElement.getFormattedTime();
+
+            if(formattedTime != null){
+                textViewTimeValue.setText(formattedTime.replace(getString(R.string.str_old_value), getString(R.string.str_new_value)));
+            }
+
+            String latitude = Double.toString(locationDataElement.getLatitude());
+
+            if(latitude != null){
+                textViewLatitudeValue.setText(latitude);
+            }
+
+            String longitude = Double.toString(locationDataElement.getLongitude());
+
+            if(longitude != null){
+                textViewLongitudeValue.setText(longitude);
+            }
+
+            String altitude = Double.toString(locationDataElement.getAltitude());
+
+            if(altitude != null){
+                textViewAltitudeValue.setText(altitude);
+            }
+
+            String speed = Double.toString(locationDataElement.getSpeed());
+
+            if(speed != null){
+                textViewSpeedValue.setText(speed);
+            }
+
+            String accuracy = Double.toString(locationDataElement.getAccuracy());
+
+            if(accuracy != null){
+                textViewAccuracyValue.setText(accuracy);
+            }
+
+            String bearing = Double.toString(locationDataElement.getBearing());
+
+            if(bearing != null){
+                textViewBearingValue.setText(bearing);
+            }
+
+            String provider = locationDataElement.getProvider();
+
+            if(provider != null){
+                textViewProviderValue.setText(provider);
+            }
+
+        }
 
     }
 
@@ -243,6 +259,21 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View vw) {
 
                 Intent intent = new Intent(getApplicationContext(), DataExportActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    private void addAddButtonListener() {
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                Intent intent = new Intent(getApplicationContext(), DataAddInformationActivity.class);
+                intent.putExtra(AppConstants.CurrentLocationData, currentLocationData);
                 startActivity(intent);
 
             }
@@ -331,6 +362,8 @@ public class MainActivity extends AppCompatActivity{
         LocationData locationData = new LocationData(timeWhenDataObtained, formattedTime, location.getLatitude(), location.getLongitude(),
                 location.getAltitude(), location.getAccuracy(), location.getProvider(), location.getSpeed(),
                 location.getBearing(), 0, 0, 0, "");
+
+        currentLocationData = locationData;
 
         appDatabase = ((BasicApp) getApplication()).getDatabase();
 

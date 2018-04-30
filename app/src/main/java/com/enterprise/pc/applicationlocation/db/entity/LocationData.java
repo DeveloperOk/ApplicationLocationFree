@@ -3,13 +3,15 @@ package com.enterprise.pc.applicationlocation.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by PC on 2018-03-30.
  */
 
 @Entity(tableName = "locationdata")
-public class LocationData {
+public class LocationData implements Parcelable{
 
     @PrimaryKey
     private long id;
@@ -219,5 +221,63 @@ public class LocationData {
         this.information = locationData.getInformation();
 
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+
+        out.writeLong(id);
+        out.writeString(formattedTime);
+        out.writeDouble(latitude);
+        out.writeDouble(longitude);
+        out.writeDouble(altitude);
+        out.writeFloat(accuracy);
+        out.writeString(provider);
+        out.writeFloat(speed);
+        out.writeFloat(bearing);
+        out.writeFloat(verticalAccuracyMeters);
+        out.writeFloat(speedAccuracyMetersPerSecond);
+        out.writeFloat(bearingAccuracyDegrees);
+        out.writeString(information);
+
+    }
+
+    private LocationData(Parcel in) {
+
+        id = in.readLong();
+        formattedTime = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        altitude = in.readDouble();
+        accuracy = in.readFloat();
+        provider = in.readString();
+        speed = in.readFloat();
+        bearing = in.readFloat();
+        verticalAccuracyMeters = in.readFloat();
+        speedAccuracyMetersPerSecond = in.readFloat();
+        bearingAccuracyDegrees = in.readFloat();
+        information = in.readString();
+
+    }
+
+    public static final Parcelable.Creator<LocationData> CREATOR
+            = new Parcelable.Creator<LocationData>() {
+
+        @Override
+        public LocationData createFromParcel(Parcel in) {
+            return new LocationData(in);
+        }
+
+        @Override
+        public LocationData[] newArray(int size) {
+            return new LocationData[size];
+        }
+    };
+
 
 }

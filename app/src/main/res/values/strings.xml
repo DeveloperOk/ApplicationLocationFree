@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Application Location</string>
 
     <string name="firstLineDefaultText">Test Successful!</string>
@@ -7,10 +8,11 @@
     <string name="button_start">Start</string>
     <string name="button_stop">Stop</string>
     <string name="button_export">Export</string>
+    <string name="button_add">Add</string>
 
     <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS--zzzz EEEE</string>
     <string name="str_old_value">--</string>
-    <string name="str_new_value">"\n   "</string>
+    <string name="str_new_value">"\n"</string>
 
     <string name="locationGraphActivityTitle">Location Graph</string>
     <string name="button_graph">Graph</string>
@@ -48,7 +50,7 @@
     <string name="controls_time_format">yyyy-MM-dd-HH-mm-ss</string>
     <string name="controls_string_split_str">-</string>
 
-    <string name="controls_time_format_str_to_date">yyyy-MM-dd-HH-mm-ss</string>
+    <string name="controls_time_format_str_to_date">yyyy-MM-dd-HH-mm-ss-SSS</string>
     <string name="controls_string_merge_str">-</string>
 
     <string name="controls_month_max">12</string>
@@ -73,7 +75,7 @@
     <string name="accuracy_label">Accuracy</string>
     <string name="bearing_label">Bearing</string>
     <string name="provider_label">Provider</string>
-    <string name="punctuation_mark_colon_and_space">":  "</string>
+    <string name="punctuation_mark_colon_and_space">" :  "</string>
 
     <string name="data_export_activity_title">Data Export</string>
     <string name="data_export_activity_button_export">Export</string>
@@ -84,5 +86,11 @@
     <string name="data_export_progress_completed">"Progress: Completed"</string>
     <string name="data_export_progress">"Progress: "</string>
     <string name="data_export_first_line">"index;id;formattedTime;latitude;longitude;altitude;accuracy;provider;speed;bearing;information\n"</string>
+
+    <string name="data_add_information_activity_title">Add Information</string>
+    <string name="textview_information">Information</string>
+
+    <string name="information_button_clear">Clear</string>
+    <string name="information_button_add">Add</string>
 
 </resources>

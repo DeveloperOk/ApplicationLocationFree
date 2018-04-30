@@ -8,4 +8,6 @@ public class AppConstants {
 
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
 
+    public static final String CurrentLocationData = "CurrentLocationData";
+
 }

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dataProperties"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrierForVerticalAlignment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="textViewTimeLabel, textViewLatitudeLabel, textViewLongitudeLabel, textViewAltitudeLabel, textViewAccuracyLabel, textViewSpeedLabel, textViewBearingLabel, textViewProviderLabel" />
+
+    <TextView
+        android:id="@+id/textViewTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTimeLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTimeLabel" />
+
+    <TextView
+        android:id="@+id/textViewTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewTimeLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTimeLabel" />
+
+    <TextView
+        android:id="@+id/textViewLatitudeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/latitude_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTimeValue" />
+
+    <TextView
+        android:id="@+id/textViewLatitudeLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewLatitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewLatitudeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewLatitudeLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewLatitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewLongitudeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/longitude_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeValue" />
+
+    <TextView
+        android:id="@+id/textViewLongitudeLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewLongitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewLongitudeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewLongitudeLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewLongitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewAltitudeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/altitude_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLongitudeValue" />
+
+    <TextView
+        android:id="@+id/textViewAltitudeLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewAltitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewAltitudeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewAltitudeLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewAltitudeLabel" />
+
+    <TextView
+        android:id="@+id/textViewAccuracyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/accuracy_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAltitudeValue" />
+
+    <TextView
+        android:id="@+id/textViewAccuracyLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewAccuracyLabel" />
+
+    <TextView
+        android:id="@+id/textViewAccuracyValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewAccuracyLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewAccuracyLabel" />
+
+    <TextView
+        android:id="@+id/textViewSpeedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/speed_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAccuracyValue" />
+
+    <TextView
+        android:id="@+id/textViewSpeedLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSpeedLabel" />
+
+    <TextView
+        android:id="@+id/textViewSpeedValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewSpeedLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSpeedLabel" />
+
+    <TextView
+        android:id="@+id/textViewBearingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/bearing_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSpeedValue" />
+
+    <TextView
+        android:id="@+id/textViewBearingLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewBearingLabel" />
+
+    <TextView
+        android:id="@+id/textViewBearingValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewBearingLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewBearingLabel" />
+
+    <TextView
+        android:id="@+id/textViewProviderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/provider_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBearingValue" />
+
+    <TextView
+        android:id="@+id/textViewProviderLabelPunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/punctuation_mark_colon_and_space"
+        app:layout_constraintLeft_toRightOf="@+id/barrierForVerticalAlignment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewProviderLabel" />
+
+    <TextView
+        android:id="@+id/textViewProviderValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstLineDefaultText"
+        app:layout_constraintLeft_toRightOf="@+id/textViewProviderLabelPunctuation"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewProviderLabel" />
+
+
+</android.support.constraint.ConstraintLayout>
