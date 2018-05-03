@@ -349,14 +349,17 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                     paint.setARGB(255, 0, 255, 0);
                     paint.setTextSize(32);
 
+                    int horizontalMargin = 20;
+                    int verticalMargin = 20;
+
                         if (canvas != null) {
 
                             canvas.drawARGB(255, 0, 0, 0);
 
                             if(locationDataList != null && !locationDataList.isEmpty()) {
 
-                            int widthOfCanvas = canvas.getWidth();
-                            int heightOfCanvas = canvas.getHeight();
+                            int widthOfCanvas = canvas.getWidth() - 2*horizontalMargin;
+                            int heightOfCanvas = canvas.getHeight() - 2*verticalMargin;
 
                             ExtremumValues extremumValuesOfLatitude = getMaxAndMinOfLatitude(locationDataList);
                             ExtremumValues extremumValuesOfLongitude = getMaxAndMinOfLongitude(locationDataList);
@@ -383,11 +386,12 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                                 if (locationData != null) {
 
                                     pts[index] = (float) ((locationData.getLongitude() - minValueOfLongitude) * scaleFactorOfLongitude);
+                                    pts[index] = pts[index] + horizontalMargin;
                                     index++;
 
                                     pts[index] = (float) ((locationData.getLatitude() - minValueOfLatitude) * scaleFactorOfLatitude);
                                     pts[index] = heightOfCanvas - pts[index];
-
+                                    pts[index] = pts[index] + verticalMargin;
                                     index++;
 
                                 }
@@ -396,8 +400,9 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                             setGraphLabels(extremumValuesOfLongitude, extremumValuesOfLatitude);
 
-                            canvas.drawLines(pts, paint);
+                            canvas.drawPoints(pts, paint);
 
+                            drawRectangleAroundGraph(canvas, horizontalMargin, verticalMargin, widthOfCanvas, heightOfCanvas);
 
                         }else{
 
@@ -417,6 +422,43 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         });
     }
+
+    private void drawRectangleAroundGraph(Canvas canvas, int horizontalMargin, int verticalMargin, int widthOfCanvas, int heightOfCanvas) {
+
+        if(canvas != null) {
+
+            Paint paintRectangle = new Paint();
+
+            paintRectangle.setARGB(255, 255, 0, 0);
+
+            int marginBetweenGraphAndRectangle = 10;
+
+            float[] pointLeftTop = new float[2];
+            pointLeftTop[0] = horizontalMargin - marginBetweenGraphAndRectangle;
+            pointLeftTop[1] = verticalMargin - marginBetweenGraphAndRectangle;
+
+            float[] pointRightTop = new float[2];
+            pointRightTop[0] = horizontalMargin + widthOfCanvas + marginBetweenGraphAndRectangle;
+            pointRightTop[1] = verticalMargin - marginBetweenGraphAndRectangle;
+
+            float[] pointRightBottom = new float[2];
+            pointRightBottom[0] = horizontalMargin + widthOfCanvas + marginBetweenGraphAndRectangle;
+            pointRightBottom[1] = verticalMargin + heightOfCanvas + marginBetweenGraphAndRectangle;
+
+            float[] pointLeftBottom = new float[2];
+            pointLeftBottom[0] = horizontalMargin - marginBetweenGraphAndRectangle;
+            pointLeftBottom[1] = verticalMargin + heightOfCanvas + marginBetweenGraphAndRectangle;
+
+
+            canvas.drawLine(pointLeftTop[0], pointLeftTop[1], pointRightTop[0], pointRightTop[1], paintRectangle);
+            canvas.drawLine(pointRightTop[0], pointRightTop[1], pointRightBottom[0], pointRightBottom[1], paintRectangle);
+            canvas.drawLine(pointRightBottom[0], pointRightBottom[1], pointLeftBottom[0], pointLeftBottom[1], paintRectangle);
+            canvas.drawLine(pointLeftBottom[0], pointLeftBottom[1], pointLeftTop[0], pointLeftTop[1], paintRectangle);
+
+        }
+
+    }
+
 
     private void setValuesOfGraphLimitsForNoData(){
 
