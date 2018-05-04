@@ -93,4 +93,8 @@
     <string name="information_button_clear">Clear</string>
     <string name="information_button_add">Add</string>
 
+    <string name="toogle_button_text">Information</string>
+    <string name="toogle_button_on_text">Enabled</string>
+    <string name="toogle_button_off_text">Disabled</string>
+
 </resources>

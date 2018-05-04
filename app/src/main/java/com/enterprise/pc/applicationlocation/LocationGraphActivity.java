@@ -5,14 +5,17 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
 import com.enterprise.pc.applicationlocation.vm.DateInformation;
@@ -44,6 +47,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     List<LocationData> mlocationDataList;
 
+    boolean showInformationFlag = false;
+    ToggleButton toggleButtonShowInformation;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +77,12 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         ((TextView) findViewById(R.id.controlsStartTime).findViewById(R.id.textViewHeader)).setText(R.string.controls_start_time_label);
         ((TextView) findViewById(R.id.controlsEndTime).findViewById(R.id.textViewHeader)).setText(R.string.controls_end_time_label);
 
-        addListeners();
+        toggleButtonShowInformation = (ToggleButton) findViewById(R.id.toggleButtonInformation);
 
         startDate = new DateInformation();
         endDate = new DateInformation();
+
+        addListeners();
 
     }
 
@@ -92,7 +101,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
     @Override
     public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
 
-        drawGraph(mlocationDataList);
+        drawGraph(mlocationDataList, showInformationFlag);
 
     }
 
@@ -103,9 +112,33 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
 
     private void addListeners() {
+        addButtonListeners();
+    }
+
+    private void addButtonListeners() {
+        addToggleButtonShowInformationListener();
+    }
+
+    private void addToggleButtonShowInformationListener() {
+
+        toggleButtonShowInformation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    showInformationFlag = true;
+                    drawGraph(mlocationDataList, showInformationFlag);
+
+                } else {
+
+                    showInformationFlag = false;
+                    drawGraph(mlocationDataList, showInformationFlag);
+                }
+            }
+        });
 
     }
 
+    
     private void addNumberPickerListenersOfStartTime() {
 
         ((NumberPicker) findViewById(R.id.controlsStartTime).findViewById(R.id.appLocationNumberPickerYear)
@@ -261,7 +294,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 if(locationDataList != null && !locationDataList.isEmpty()){
 
                     mlocationDataList = locationDataList;
-                    drawGraph(locationDataList);
+                    drawGraph(locationDataList, showInformationFlag);
 
                 }
 
@@ -320,7 +353,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                     List<LocationData> locationDataList = dataRepository.getLocationDataBetweenStartAndEndTimeSync(startDateMs, endDateMs);
 
                     mlocationDataList = locationDataList;
-                    drawGraph(locationDataList);
+                    drawGraph(locationDataList, showInformationFlag);
 
                 });
 
@@ -333,7 +366,8 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     }
 
-    private void drawGraph(List<LocationData> locationDataList) {
+
+    private void drawGraph(List<LocationData> locationDataList, boolean showInformationFlag) {
 
         executors.mainThread().execute(() -> {
 
@@ -345,31 +379,43 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                     Canvas canvas = holder.lockCanvas();
 
-                    Paint paint = new Paint();
-                    paint.setARGB(255, 0, 255, 0);
-                    paint.setTextSize(32);
 
-                    int horizontalMargin = 20;
-                    int verticalMargin = 20;
 
                         if (canvas != null) {
+
+                            Paint paint = new Paint();
+                            paint.setARGB(255, 0, 255, 0);
+                            paint.setTextSize(32);
+                            paint.setTextAlign(Paint.Align.LEFT);
+
+                            int horizontalMargin = 20;
+                            int verticalMargin = 20;
+
+                            Paint paintInformation = new Paint();
+                            paintInformation.setARGB(255, 0, 255, 0);
+                            int textSize = 32;
+                            paintInformation.setTextSize(textSize);
+                            paintInformation.setTextAlign(Paint.Align.LEFT);
 
                             canvas.drawARGB(255, 0, 0, 0);
 
                             if(locationDataList != null && !locationDataList.isEmpty()) {
 
-                            int widthOfCanvas = canvas.getWidth() - 2*horizontalMargin;
-                            int heightOfCanvas = canvas.getHeight() - 2*verticalMargin;
+                            int widthOfCanvas = canvas.getWidth();
+                            int heightOfCanvas = canvas.getHeight();
+
+                            int widthOfCanvasMinusTwoHorizontalMargin = widthOfCanvas - 2*horizontalMargin;
+                            int heightOfCanvasMinusTwoHorizontalMargin = heightOfCanvas - 2*verticalMargin;
 
                             ExtremumValues extremumValuesOfLatitude = getMaxAndMinOfLatitude(locationDataList);
                             ExtremumValues extremumValuesOfLongitude = getMaxAndMinOfLongitude(locationDataList);
 
                             double scaleFactorOfLatitude =
-                                    Math.floor(heightOfCanvas /
+                                    Math.floor(heightOfCanvasMinusTwoHorizontalMargin /
                                             (extremumValuesOfLatitude.getMaxValue() - extremumValuesOfLatitude.getMinValue()));
 
                             double scaleFactorOfLongitude =
-                                    Math.floor(widthOfCanvas /
+                                    Math.floor(widthOfCanvasMinusTwoHorizontalMargin /
                                             (extremumValuesOfLongitude.getMaxValue() - extremumValuesOfLongitude.getMinValue()));
 
                             int sizeOfLocationDataList = locationDataList.size();
@@ -381,18 +427,38 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                             double minValueOfLongitude = extremumValuesOfLongitude.getMinValue();
                             double minValueOfLatitude = extremumValuesOfLatitude.getMinValue();
 
+                            float xCoordinate;
+                            float yCoordinate;
+
                             for (LocationData locationData : locationDataList) {
 
                                 if (locationData != null) {
 
                                     pts[index] = (float) ((locationData.getLongitude() - minValueOfLongitude) * scaleFactorOfLongitude);
                                     pts[index] = pts[index] + horizontalMargin;
+                                    xCoordinate = pts[index];
                                     index++;
 
                                     pts[index] = (float) ((locationData.getLatitude() - minValueOfLatitude) * scaleFactorOfLatitude);
-                                    pts[index] = heightOfCanvas - pts[index];
+                                    pts[index] = heightOfCanvasMinusTwoHorizontalMargin - pts[index];
                                     pts[index] = pts[index] + verticalMargin;
+                                    yCoordinate = pts[index];
                                     index++;
+
+                                    if(showInformationFlag == true) {
+
+                                        String information = locationData.getInformation();
+
+                                        if (information != null) {
+
+                                            if (!information.isEmpty()) {
+
+                                                canvas.drawText(information, xCoordinate, yCoordinate, paintInformation);
+
+                                            }
+                                        }
+
+                                    }
 
                                 }
 
@@ -402,11 +468,17 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                             canvas.drawPoints(pts, paint);
 
-                            drawRectangleAroundGraph(canvas, horizontalMargin, verticalMargin, widthOfCanvas, heightOfCanvas);
+                            drawRectangleAroundGraph(canvas, horizontalMargin, verticalMargin, widthOfCanvasMinusTwoHorizontalMargin, heightOfCanvasMinusTwoHorizontalMargin);
 
                         }else{
 
-                                canvas.drawText(getString(R.string.no_data_to_display_label), 50, 50, paint);
+                                String noDataToDisplay = getString(R.string.no_data_to_display_label);
+
+                                Rect bounds = new Rect();
+                                paint.getTextBounds(noDataToDisplay, 0, noDataToDisplay.length(), bounds);
+                                int height = bounds.height();
+
+                                canvas.drawText(noDataToDisplay, 2*height, 2*height, paint);
 
                                 setValuesOfGraphLimitsForNoData();
 
