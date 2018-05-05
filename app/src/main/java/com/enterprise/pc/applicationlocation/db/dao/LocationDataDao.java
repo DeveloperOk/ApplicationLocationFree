@@ -32,6 +32,9 @@ public interface LocationDataDao {
     @Query("select * from locationdata where id = :entityId")
     LocationData loadLocationDataSync(long entityId);
 
+    @Query("select * from locationdata where id = (select max(id) from locationdata)")
+    LocationData loadLocationDataHavingNewestTimeSync();
+
     @Query("select min(id) from locationdata")
     long getOldestTimeMsSync();
 

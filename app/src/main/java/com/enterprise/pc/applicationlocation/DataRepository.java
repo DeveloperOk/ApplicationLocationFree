@@ -65,4 +65,8 @@ public class DataRepository {
         return  mDatabase.locationDataDao().getLocationDataBetweenStartAndEndTimeSync(startId, endId);
     }
 
+    public LocationData loadLocationDataHavingNewestTimeSync(){
+        return  mDatabase.locationDataDao().loadLocationDataHavingNewestTimeSync();
+    }
+
 }

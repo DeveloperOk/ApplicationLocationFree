@@ -50,6 +50,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
     boolean showInformationFlag = false;
     ToggleButton toggleButtonShowInformation;
 
+    boolean initializedFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,6 +296,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                     mlocationDataList = locationDataList;
                     drawGraph(locationDataList, showInformationFlag);
+                    initializedFlag = true;
 
                 }
 
@@ -472,15 +474,19 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                         }else{
 
-                                String noDataToDisplay = getString(R.string.no_data_to_display_label);
+                                if(initializedFlag == true){
 
-                                Rect bounds = new Rect();
-                                paint.getTextBounds(noDataToDisplay, 0, noDataToDisplay.length(), bounds);
-                                int height = bounds.height();
+                                    String noDataToDisplay = getString(R.string.no_data_to_display_label);
 
-                                canvas.drawText(noDataToDisplay, 2*height, 2*height, paint);
+                                    Rect bounds = new Rect();
+                                    paint.getTextBounds(noDataToDisplay, 0, noDataToDisplay.length(), bounds);
+                                    int height = bounds.height();
 
-                                setValuesOfGraphLimitsForNoData();
+                                    canvas.drawText(noDataToDisplay, 2*height, 2*height, paint);
+
+                                    setValuesOfGraphLimitsForNoData();
+
+                                }
 
                             }
 

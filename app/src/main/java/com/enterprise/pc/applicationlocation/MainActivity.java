@@ -1,16 +1,12 @@
 package com.enterprise.pc.applicationlocation;
 
 import android.Manifest;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,15 +17,9 @@ import android.widget.TextView;
 
 import com.enterprise.pc.applicationlocation.db.AppDatabase;
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
-import com.enterprise.pc.applicationlocation.vm.LocationDataViewModel;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -49,9 +39,6 @@ public class MainActivity extends AppCompatActivity{
     TextView textViewBearingValue;
     TextView textViewProviderValue;
 
-    LocationDataViewModel locationDataViewModel;
-
-    int count = 1;
 
     AppExecutors executors;
     AppDatabase appDatabase;
@@ -60,11 +47,8 @@ public class MainActivity extends AppCompatActivity{
     LocationManager locationManager;
     LocationListener locationListener;
 
-    final String filenameOfLocationDataOutput = "locationDataOutput.txt";
-    File fileLocationDataOutput;
-    FileOutputStream fileOutputStreamLocationDataOutput;
-
     LocationData currentLocationData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +65,13 @@ public class MainActivity extends AppCompatActivity{
         buttonExport = (Button)findViewById(R.id.buttonExport);
         buttonAdd = (Button)findViewById(R.id.buttonAdd);
 
-        locationDataViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
+        dataRepository = ((BasicApp) getApplication()).getRepository();
+
+        appDatabase = ((BasicApp) getApplication()).getDatabase();
+
+        setLocationDataOnCreate();
 
         addListeners();
-
-        initializeLocationDataOutputFile();
 
     }
 
@@ -100,17 +86,9 @@ public class MainActivity extends AppCompatActivity{
         textViewProviderValue = (TextView) findViewById(R.id.textViewProviderValue);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        closeLocationDataOutputFile();
-
-    }
 
     private void addListeners() {
 
-        addDataListeners();
         addButtonListeners();
         addListenerForGPS();
     }
@@ -125,31 +103,24 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private void addDataListeners() {
+    private void setLocationDataOnCreate() {
 
-        dataRepository = ((BasicApp) getApplication()).getRepository();
+        if(dataRepository == null){
 
-        locationDataViewModel.setLocationData(dataRepository.getLocationData());
+            dataRepository = ((BasicApp) getApplication()).getRepository();
+        }
 
-        final Observer<List<LocationData>> locationDataListObserver = new Observer<List<LocationData>>() {
+        executors.storageIO().execute(() -> {
 
-            @Override
-            public void onChanged(@Nullable final List<LocationData> locationDataList) {
+            LocationData locationData = dataRepository.loadLocationDataHavingNewestTimeSync();
 
-                if(locationDataList != null && !locationDataList.isEmpty()){
+            executors.mainThread().execute(() -> {
 
-                    int sizeOfLocationDataList = locationDataList.size();
-                    LocationData locationDataElement = locationDataList.get(sizeOfLocationDataList-1);
+                currentLocationData = locationData;
+                setTextsOfTextViews(locationData);
+            });
 
-                    currentLocationData = locationDataElement;
-                    setTextsOfTextViews(locationDataElement);
-
-                }
-
-            }
-        };
-
-        locationDataViewModel.getLocationData().observe( this, locationDataListObserver);
+        });
 
     }
 
@@ -363,9 +334,16 @@ public class MainActivity extends AppCompatActivity{
                 location.getAltitude(), location.getAccuracy(), location.getProvider(), location.getSpeed(),
                 location.getBearing(), 0, 0, 0, "");
 
-        currentLocationData = locationData;
+        if(appDatabase == null){
 
-        appDatabase = ((BasicApp) getApplication()).getDatabase();
+            appDatabase = ((BasicApp) getApplication()).getDatabase();
+        }
+
+        executors.mainThread().execute(() -> {
+
+            currentLocationData = locationData;
+            setTextsOfTextViews(locationData);
+        });
 
         executors.storageIO().execute(() -> {
 
@@ -373,7 +351,6 @@ public class MainActivity extends AppCompatActivity{
 
         });
 
-        writeDataToFile(locationData);
 
     }
 
@@ -404,78 +381,6 @@ public class MainActivity extends AppCompatActivity{
             // other 'case' lines to check for other
             // permissions this app might request.
         }
-    }
-
-
-    private void initializeLocationDataOutputFile(){
-
-        if(isExternalStorageWritable()){
-
-            fileLocationDataOutput = new File(getApplicationContext().getExternalFilesDir(null) + "/" + filenameOfLocationDataOutput);
-
-            try {
-                fileOutputStreamLocationDataOutput = new FileOutputStream(fileLocationDataOutput, true);
-            } catch (FileNotFoundException e) {
-                //e.printStackTrace();
-            }
-
-        }
-
-    }
-
-
-    private void closeLocationDataOutputFile(){
-
-        try {
-            fileOutputStreamLocationDataOutput.close();
-        } catch (IOException e) {
-            //e.printStackTrace();
-        }
-
-    }
-
-
-    private void writeDataToFile(LocationData locationData){
-
-        if(locationData != null){
-
-            String outputLine = count + " " + locationData.getLatitude() + " " + locationData.getLongitude() + "\n";
-
-            try {
-
-                if (isExternalStorageWritable()) {
-                    fileOutputStreamLocationDataOutput.write(outputLine.getBytes());
-
-                    count++;
-                }
-
-            } catch (IOException e) {
-                //e.printStackTrace();
-            }
-
-        }
-
-    }
-
-
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
     }
 
 
