@@ -97,4 +97,13 @@
     <string name="toogle_button_on_text">Enabled</string>
     <string name="toogle_button_off_text">Disabled</string>
 
+    <string name="add_information_dialog_title">Information</string>
+    <string name="add_information_dialog_message">Completed.</string>
+    <string name="add_information_dialog_neutral_button">OK</string>
+
+    <string name="data_export_dialog_title">Information</string>
+    <string name="data_export_dialog_message_first_line">Completed.</string>
+    <string name="data_export_dialog_message_second_line">"\nOutput File Path: "</string>
+    <string name="data_export_dialog_neutral_button">OK</string>
+
 </resources>

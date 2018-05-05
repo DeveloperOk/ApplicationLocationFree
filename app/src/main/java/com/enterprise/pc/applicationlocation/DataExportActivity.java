@@ -1,7 +1,9 @@
 package com.enterprise.pc.applicationlocation;
 
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +36,11 @@ public class DataExportActivity extends AppCompatActivity {
 
     TextView textViewProgress;
 
+    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog alertDialog;
+
+    String pathOfOutputFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,24 @@ public class DataExportActivity extends AppCompatActivity {
         textViewProgress = (TextView) findViewById(R.id.textViewProgress);
 
         addListeners();
+
+        instantiateAlertDialog();
+
+    }
+
+    private void instantiateAlertDialog() {
+
+        alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setTitle(R.string.data_export_dialog_title);
+        alertDialogBuilder.setMessage(R.string.data_export_dialog_message_first_line);
+        alertDialogBuilder.setNeutralButton(R.string.data_export_dialog_neutral_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialog = alertDialogBuilder.create();
 
     }
 
@@ -170,6 +195,10 @@ public class DataExportActivity extends AppCompatActivity {
                             textViewProgress.setText(getString(R.string.data_export_progress_completed));
                             textViewProgress.setVisibility(View.INVISIBLE);
 
+                            alertDialog.setMessage(getString(R.string.data_export_dialog_message_first_line)
+                                    + getString(R.string.data_export_dialog_message_second_line) + pathOfOutputFile);
+                            alertDialog.show();
+
                         });
 
                     }
@@ -197,7 +226,8 @@ public class DataExportActivity extends AppCompatActivity {
             String filenameOfLocationDataOutput
                     = getString(R.string.file_name_for_data_export) + formattedTime + getString(R.string.file_extension_for_data_export);
 
-            File fileLocationDataOutput = new File(getApplicationContext().getExternalFilesDir(null) + "/" + filenameOfLocationDataOutput);
+            pathOfOutputFile = getApplicationContext().getExternalFilesDir(null) + "/" + filenameOfLocationDataOutput;
+            File fileLocationDataOutput = new File(pathOfOutputFile);
 
             try {
                 fileOutputStreamLocationDataOutput = new FileOutputStream(fileLocationDataOutput, true);

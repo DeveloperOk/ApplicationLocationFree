@@ -1,5 +1,7 @@
 package com.enterprise.pc.applicationlocation;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +33,9 @@ public class DataAddInformationActivity extends AppCompatActivity {
 
     LocationData currentLocationData;
 
+    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog alertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,24 @@ public class DataAddInformationActivity extends AppCompatActivity {
         buttonAdd = (Button)findViewById(R.id.buttonAdd);
 
         addButtonListeners();
+
+        instantiateAlertDialog();
+
+    }
+
+    private void instantiateAlertDialog() {
+
+        alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setTitle(R.string.add_information_dialog_title);
+        alertDialogBuilder.setMessage(R.string.add_information_dialog_message);
+        alertDialogBuilder.setNeutralButton(R.string.add_information_dialog_neutral_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialog = alertDialogBuilder.create();
 
     }
 
@@ -116,6 +139,12 @@ public class DataAddInformationActivity extends AppCompatActivity {
             executors.storageIO().execute(() -> {
 
                 AppDatabase.insert(appDatabase, currentLocationData);
+
+
+                executors.mainThread().execute(() -> {
+
+                    alertDialog.show();
+                });
 
             });
         }
