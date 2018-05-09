@@ -26,5 +26,9 @@ public class BasicApp extends Application {
 
     public DataRepository getRepository() { return DataRepository.getInstance(getDatabase()); }
 
+    public AppLocationManager getAppLocationManager() {
+        return AppLocationManager.getInstance(this);
+    }
+
 
 }

@@ -19,15 +19,18 @@ public class AppExecutors {
 
     private final Executor mMainThread;
 
-    private AppExecutors(Executor storageIO, Executor networkIO, Executor mainThread) {
+    private final Executor mDatabaseReadPeriodicallyThread;
+
+    private AppExecutors(Executor storageIO, Executor networkIO, Executor mainThread, Executor mDatabaseReadPeriodicallyThread) {
         this.mStorageIO = storageIO;
         this.mNetworkIO = networkIO;
         this.mMainThread = mainThread;
+        this.mDatabaseReadPeriodicallyThread = mDatabaseReadPeriodicallyThread;
     }
 
     public AppExecutors() {
         this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
-                new MainThreadExecutor());
+                new MainThreadExecutor(), Executors.newSingleThreadExecutor());
     }
 
     public Executor storageIO() {
@@ -40,6 +43,10 @@ public class AppExecutors {
 
     public Executor mainThread() {
         return mMainThread;
+    }
+
+    public Executor databaseReadPeriodicallyThread() {
+        return mDatabaseReadPeriodicallyThread;
     }
 
     private static class MainThreadExecutor implements Executor {

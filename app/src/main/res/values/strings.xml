@@ -93,9 +93,9 @@
     <string name="information_button_clear">Clear</string>
     <string name="information_button_add">Add</string>
 
-    <string name="toogle_button_text">Information</string>
-    <string name="toogle_button_on_text">Enabled</string>
-    <string name="toogle_button_off_text">Disabled</string>
+    <string name="toggle_button_text">Information</string>
+    <string name="toggle_button_on_text">Enabled</string>
+    <string name="toggle_button_off_text">Disabled</string>
 
     <string name="add_information_dialog_title">Information</string>
     <string name="add_information_dialog_message">Completed.</string>
@@ -105,5 +105,14 @@
     <string name="data_export_dialog_message_first_line">Completed.</string>
     <string name="data_export_dialog_message_second_line">"\nOutput File Path: "</string>
     <string name="data_export_dialog_neutral_button">OK</string>
+
+    <string name="button_start_location_graph">Start</string>
+    <string name="button_stop_location_graph">Stop</string>
+    
+    <string name="toggle_live_graph_text">Live Graph</string>
+    <string name="toggle_button_live_graph_on_text">Enabled</string>
+    <string name="toggle_button_live_graph_off_text">Disabled</string>
+
+    <string name="button_set_start_time">Set Start Time to Current Time</string>
 
 </resources>

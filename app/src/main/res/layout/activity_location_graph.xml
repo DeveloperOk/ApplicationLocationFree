@@ -343,7 +343,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/toggleButtonInformation"
                         app:layout_constraintBaseline_toBaselineOf="@+id/toggleButtonInformation"
-                        android:text="@string/toogle_button_text"
+                        android:text="@string/toggle_button_text"
                         app:layout_constraintHorizontal_chainStyle="packed"/>
 
                     <ToggleButton
@@ -351,11 +351,72 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textOn="@string/toogle_button_on_text"
-                        android:textOff="@string/toogle_button_off_text"
+                        android:textOn="@string/toggle_button_on_text"
+                        android:textOff="@string/toggle_button_off_text"
                         app:layout_constraintLeft_toRightOf="@+id/textViewInformation"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textViewLiveGraph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/toggleButtonLiveGraph"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/toggleButtonLiveGraph"
+                        android:text="@string/toggle_live_graph_text"
+                        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                    <ToggleButton
+                        android:id="@+id/toggleButtonLiveGraph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textOn="@string/toggle_button_live_graph_on_text"
+                        android:textOff="@string/toggle_button_live_graph_off_text"
+                        app:layout_constraintLeft_toRightOf="@+id/textViewLiveGraph"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toggleButtonInformation" />
+
+                    <Button
+                        android:id="@+id/buttonStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/colorButton"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/buttonStop"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonStop"
+                        android:text="@string/button_start_location_graph"
+                        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                    <Button
+                        android:id="@+id/buttonStop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/colorButton"
+                        android:text="@string/button_stop_location_graph"
+                        app:layout_constraintLeft_toRightOf="@+id/buttonStart"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toggleButtonLiveGraph" />
+
+
+                    <Button
+                        android:id="@+id/buttonSetStartTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@color/colorButton"
+                        android:text="@string/button_set_start_time"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
 
 
                     <android.support.constraint.ConstraintLayout
@@ -364,7 +425,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/toggleButtonInformation"
+                        app:layout_constraintTop_toBottomOf="@+id/buttonSetStartTime"
                         app:layout_constraintBottom_toTopOf="@+id/controlsEndTime"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp" >

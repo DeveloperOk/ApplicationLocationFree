@@ -10,4 +10,6 @@ public class AppConstants {
 
     public static final String CurrentLocationData = "CurrentLocationData";
 
+    public static final int DatabaseReadSleepDurationMillisecond = 1000;
+
 }

@@ -1,14 +1,8 @@
 package com.enterprise.pc.applicationlocation;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,11 +38,11 @@ public class MainActivity extends AppCompatActivity{
     AppDatabase appDatabase;
     DataRepository dataRepository;
 
-    LocationManager locationManager;
-    LocationListener locationListener;
 
     LocationData currentLocationData;
 
+    AppLocationManager appLocationManager;
+    LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +59,22 @@ public class MainActivity extends AppCompatActivity{
         buttonExport = (Button)findViewById(R.id.buttonExport);
         buttonAdd = (Button)findViewById(R.id.buttonAdd);
 
-        dataRepository = ((BasicApp) getApplication()).getRepository();
+        executors.storageIO().execute(() -> {
 
-        appDatabase = ((BasicApp) getApplication()).getDatabase();
+            dataRepository = ((BasicApp) getApplication()).getRepository();
+
+            appDatabase = ((BasicApp) getApplication()).getDatabase();
+
+        });
+
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
 
         setLocationDataOnCreate();
 
         addListeners();
 
     }
+
 
     private void initializeTextViews() {
         textViewTimeValue = (TextView) findViewById(R.id.textViewTimeValue);
@@ -105,12 +106,12 @@ public class MainActivity extends AppCompatActivity{
 
     private void setLocationDataOnCreate() {
 
-        if(dataRepository == null){
-
-            dataRepository = ((BasicApp) getApplication()).getRepository();
-        }
-
         executors.storageIO().execute(() -> {
+
+            if(dataRepository == null){
+
+                dataRepository = ((BasicApp) getApplication()).getRepository();
+            }
 
             LocationData locationData = dataRepository.loadLocationDataHavingNewestTimeSync();
 
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                registerListenerForGPS();
+                appLocationManager.registerListenerForGPS();
 
             }
         });
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                removeListenerForGPS();
+                appLocationManager.removeListenerForGPS();
 
             }
         });
@@ -254,9 +255,6 @@ public class MainActivity extends AppCompatActivity{
 
     private void addListenerForGPS() {
 
-        // Acquire a reference to the system Location Manager
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -271,52 +269,13 @@ public class MainActivity extends AppCompatActivity{
             public void onProviderDisabled(String provider) {}
         };
 
-        checkPermissionAndRegisterListenerForGPS();
+        if(appLocationManager != null){
 
-    }
+            appLocationManager.setLocationListener(locationListener);
 
-
-    private void checkPermissionAndRegisterListenerForGPS() {
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-        } else {
-
-            // Permission has already been granted
-
-            registerListenerForGPS();
+            appLocationManager.checkPermissionAndRegisterListenerForGPS(this);
 
         }
-
-    }
-
-
-    private void registerListenerForGPS() {
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            // Register the listener with the Location Manager to receive location updates
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
-
-    }
-
-
-    private void removeListenerForGPS() {
-
-        // Remove the listener you previously added
-        locationManager.removeUpdates(locationListener);
 
     }
 
@@ -334,10 +293,6 @@ public class MainActivity extends AppCompatActivity{
                 location.getAltitude(), location.getAccuracy(), location.getProvider(), location.getSpeed(),
                 location.getBearing(), 0, 0, 0, "");
 
-        if(appDatabase == null){
-
-            appDatabase = ((BasicApp) getApplication()).getDatabase();
-        }
 
         executors.mainThread().execute(() -> {
 
@@ -347,41 +302,16 @@ public class MainActivity extends AppCompatActivity{
 
         executors.storageIO().execute(() -> {
 
+            if(appDatabase == null){
+
+                appDatabase = ((BasicApp) getApplication()).getDatabase();
+            }
+
             AppDatabase.insert(appDatabase, locationData);
 
         });
 
 
     }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // ACCESS_FINE_LOCATION-related task you need to do.
-
-                    registerListenerForGPS();
-
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
 
 }

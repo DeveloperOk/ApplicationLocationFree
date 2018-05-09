@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -52,10 +53,25 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     boolean initializedFlag = false;
 
+    AppLocationManager appLocationManager;
+
+    Button buttonStart;
+    Button buttonStop;
+
+    Observer<List<LocationData>> locationDataListObserver = null;
+    boolean liveDataFlag = false;
+
+    boolean locationUpdateActiveOnCreate = false;
+
+    ToggleButton toggleButtonLiveGraph;
+
+    Button buttonSetStartTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_graph);
+
 
         setTitle(R.string.locationGraphActivityTitle);
 
@@ -79,14 +95,36 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         ((TextView) findViewById(R.id.controlsEndTime).findViewById(R.id.textViewHeader)).setText(R.string.controls_end_time_label);
 
         toggleButtonShowInformation = (ToggleButton) findViewById(R.id.toggleButtonInformation);
+        buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonStop = (Button) findViewById(R.id.buttonStop);
+        toggleButtonLiveGraph = (ToggleButton) findViewById(R.id.toggleButtonLiveGraph);
+        buttonSetStartTime = (Button) findViewById(R.id.buttonSetStartTime);
+
 
         startDate = new DateInformation();
         endDate = new DateInformation();
 
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
+
         addListeners();
+
+        removeLocationListenerOnCreate();
 
     }
 
+    private void removeLocationListenerOnCreate(){
+
+        if (appLocationManager != null) {
+
+            if (appLocationManager.isLocationUpdateActive() == true){
+
+                locationUpdateActiveOnCreate = true;
+                appLocationManager.removeListenerForGPS();
+            }
+
+        }
+
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -118,6 +156,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     private void addButtonListeners() {
         addToggleButtonShowInformationListener();
+        addStartButtonListener();
+        addStopButtonListener();
+        addToggleButtonLiveGraphListener();
+        addSetStartTimeButtonListener();
     }
 
     private void addToggleButtonShowInformationListener() {
@@ -133,13 +175,102 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                     showInformationFlag = false;
                     drawGraph(mlocationDataList, showInformationFlag);
+
                 }
             }
         });
 
     }
 
-    
+    private void addToggleButtonLiveGraphListener() {
+
+        toggleButtonLiveGraph.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    liveDataFlag = true;
+                    readDatabasePeriodically(AppConstants.DatabaseReadSleepDurationMillisecond);
+
+                } else {
+
+                    liveDataFlag = false;
+
+                }
+            }
+        });
+
+    }
+
+    private void readDatabasePeriodically(int sleepDuration) {
+
+        executors.databaseReadPeriodicallyThread().execute(() -> {
+
+            while (liveDataFlag) {
+
+                try {
+                    Thread.sleep(sleepDuration);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                updateGraphAndValuesOfControlsForFixedStartTime();
+
+            }
+
+        });
+
+    }
+
+
+    private void addStartButtonListener() {
+
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                if(appLocationManager != null){
+
+                    appLocationManager.registerListenerForGPS();
+                }
+
+            }
+        });
+
+    }
+
+    private void addStopButtonListener() {
+
+        buttonStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                if(appLocationManager != null){
+
+                    appLocationManager.removeListenerForGPS();
+                }
+
+            }
+        });
+
+    }
+
+    private void addSetStartTimeButtonListener() {
+
+        buttonSetStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                Date date = new Date();
+                setValuesOfStartTimeControls(date.getTime(), findViewById(R.id.controlsStartTime));
+                updateGraphAndValuesOfControlsForFixedStartTime();
+
+            }
+        });
+
+    }
+
+
+
     private void addNumberPickerListenersOfStartTime() {
 
         ((NumberPicker) findViewById(R.id.controlsStartTime).findViewById(R.id.appLocationNumberPickerYear)
@@ -282,34 +413,144 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     private void addDataListeners() {
 
-        dataRepository = ((BasicApp) getApplication()).getRepository();
+        if(locationDataViewModel != null){
 
-        locationDataViewModel.setLocationData(dataRepository.getLocationData());
+            executors.storageIO().execute(() -> {
 
-        final Observer<List<LocationData>> locationDataListObserver = new Observer<List<LocationData>>() {
+                if(dataRepository == null){
 
-
-            @Override
-            public void onChanged(@Nullable final List<LocationData> locationDataList) {
-
-                if(locationDataList != null && !locationDataList.isEmpty()){
-
-                    mlocationDataList = locationDataList;
-                    drawGraph(locationDataList, showInformationFlag);
-                    initializedFlag = true;
-
+                    dataRepository = ((BasicApp) getApplication()).getRepository();
                 }
 
-            }
-        };
+                locationDataViewModel.setLocationData(dataRepository.getLocationData());
 
-        locationDataViewModel.getLocationData().observe( this, locationDataListObserver);
+                locationDataListObserver = new Observer<List<LocationData>>() {
+
+                    @Override
+                    public void onChanged(@Nullable final List<LocationData> locationDataList) {
+
+
+                        executors.mainThread().execute(() -> {
+
+                            if (locationDataList != null && !locationDataList.isEmpty()) {
+
+                                mlocationDataList = locationDataList;
+
+                                drawGraph(locationDataList, showInformationFlag);
+                                initializedFlag = true;
+
+                                if (appLocationManager != null) {
+                                    if (locationUpdateActiveOnCreate == true) {
+                                        appLocationManager.registerListenerForGPS();
+                                    }
+                                }
+
+
+                                if (locationDataViewModel != null) {
+                                    if (locationDataListObserver != null) {
+
+                                        locationDataViewModel.getLocationData().removeObserver(locationDataListObserver);
+                                    }
+
+                                }
+
+
+                            }
+                        });
+
+                    }
+                };
+
+                locationDataViewModel.getLocationData().observe(this, locationDataListObserver);
+
+            });
+        }
 
     }
+
+    private void updateValuesOfControls(){
+
+        executors.storageIO().execute(() -> {
+
+            if(dataRepository == null){
+                dataRepository = ((BasicApp) getApplication()).getRepository();
+            }
+
+            long oldestTimeMs = dataRepository.getOldestTimeMsSync();
+            long newestTimeMs = dataRepository.getNewestTimeMsSync();
+
+            executors.mainThread().execute(() -> {
+
+                setValuesOfStartTimeControls(oldestTimeMs, findViewById(R.id.controlsStartTime));
+                setValuesOfEndTimeControls(newestTimeMs, findViewById(R.id.controlsEndTime));
+
+            });
+
+        });
+
+    }
+
+
 
     private void doOnValueChange(){
         updateGraph();
     }
+
+    private void updateGraphAndValuesOfControlsForFixedStartTime(){
+
+        if(startDate !=null ) {
+
+            String separatorStr = getString(R.string.controls_string_merge_str);
+
+            String startDateStr = Integer.toString(startDate.getYear()) + separatorStr +
+                    Integer.toString(startDate.getMonth()) + separatorStr +
+                    Integer.toString(startDate.getDay()) + separatorStr +
+                    Integer.toString(startDate.getHour()) + separatorStr +
+                    Integer.toString(startDate.getMinute()) + separatorStr +
+                    Integer.toString(startDate.getSecond()) + separatorStr +
+                    Integer.toString(startDate.getMillisecond());
+
+
+            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.controls_time_format_str_to_date));
+
+            Date dateStartDate;
+
+            try {
+                dateStartDate = dateFormat.parse(startDateStr);
+
+                long startDateMs = dateStartDate.getTime();
+
+                executors.storageIO().execute(() -> {
+
+                    if (dataRepository == null) {
+                        dataRepository = ((BasicApp) getApplication()).getRepository();
+                    }
+
+                    long endDateMs = dataRepository.getNewestTimeMsSync();
+
+                    List<LocationData> locationDataList = dataRepository.getLocationDataBetweenStartAndEndTimeSync(startDateMs, endDateMs);
+
+                    executors.mainThread().execute(() -> {
+
+                        setValuesOfEndTimeControls(endDateMs, findViewById(R.id.controlsEndTime));
+
+                    });
+
+                    mlocationDataList = locationDataList;
+                    drawGraph(locationDataList, showInformationFlag);
+
+                });
+
+
+            } catch (ParseException e) {
+
+            }
+
+        }
+
+    }
+
+
 
     private void updateGraph(){
 
@@ -346,11 +587,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 long startDateMs = dateStartDate.getTime();
                 long endDateMs = dateEndDate.getTime();
 
-                if (dataRepository == null) {
-                    dataRepository = ((BasicApp) getApplication()).getRepository();
-                }
-
                 executors.storageIO().execute(() -> {
+
+                    if (dataRepository == null) {
+                        dataRepository = ((BasicApp) getApplication()).getRepository();
+                    }
 
                     List<LocationData> locationDataList = dataRepository.getLocationDataBetweenStartAndEndTimeSync(startDateMs, endDateMs);
 
@@ -369,7 +610,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
     }
 
 
-    private void drawGraph(List<LocationData> locationDataList, boolean showInformationFlag) {
+    private synchronized void drawGraph(List<LocationData> locationDataList, boolean showInformationFlag) {
 
         executors.mainThread().execute(() -> {
 
@@ -382,26 +623,25 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                     Canvas canvas = holder.lockCanvas();
 
 
+                    if (canvas != null) {
 
-                        if (canvas != null) {
+                        Paint paint = new Paint();
+                        paint.setARGB(255, 0, 255, 0);
+                        paint.setTextSize(32);
+                        paint.setTextAlign(Paint.Align.LEFT);
 
-                            Paint paint = new Paint();
-                            paint.setARGB(255, 0, 255, 0);
-                            paint.setTextSize(32);
-                            paint.setTextAlign(Paint.Align.LEFT);
+                        int horizontalMargin = 20;
+                        int verticalMargin = 20;
 
-                            int horizontalMargin = 20;
-                            int verticalMargin = 20;
+                        Paint paintInformation = new Paint();
+                        paintInformation.setARGB(255, 0, 255, 0);
+                        int textSize = 32;
+                        paintInformation.setTextSize(textSize);
+                        paintInformation.setTextAlign(Paint.Align.LEFT);
 
-                            Paint paintInformation = new Paint();
-                            paintInformation.setARGB(255, 0, 255, 0);
-                            int textSize = 32;
-                            paintInformation.setTextSize(textSize);
-                            paintInformation.setTextAlign(Paint.Align.LEFT);
+                        canvas.drawARGB(255, 0, 0, 0);
 
-                            canvas.drawARGB(255, 0, 0, 0);
-
-                            if(locationDataList != null && !locationDataList.isEmpty()) {
+                        if(locationDataList != null && !locationDataList.isEmpty()) {
 
                             int widthOfCanvas = canvas.getWidth();
                             int heightOfCanvas = canvas.getHeight();
@@ -472,33 +712,37 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                             drawRectangleAroundGraph(canvas, horizontalMargin, verticalMargin, widthOfCanvasMinusTwoHorizontalMargin, heightOfCanvasMinusTwoHorizontalMargin);
 
+
+
                         }else{
 
-                                if(initializedFlag == true){
+                            if(initializedFlag == true){
 
-                                    String noDataToDisplay = getString(R.string.no_data_to_display_label);
+                                String noDataToDisplay = getString(R.string.no_data_to_display_label);
 
-                                    Rect bounds = new Rect();
-                                    paint.getTextBounds(noDataToDisplay, 0, noDataToDisplay.length(), bounds);
-                                    int height = bounds.height();
+                                Rect bounds = new Rect();
+                                paint.getTextBounds(noDataToDisplay, 0, noDataToDisplay.length(), bounds);
+                                int height = bounds.height();
 
-                                    canvas.drawText(noDataToDisplay, 2*height, 2*height, paint);
+                                canvas.drawText(noDataToDisplay, 2*height, 2*height, paint);
 
-                                    setValuesOfGraphLimitsForNoData();
-
-                                }
+                                setValuesOfGraphLimitsForNoData();
 
                             }
 
-                            holder.unlockCanvasAndPost(canvas);
-
                         }
+
+                        holder.unlockCanvasAndPost(canvas);
+
+                    }
+
 
                 }
 
             }
 
         });
+
     }
 
     private void drawRectangleAroundGraph(Canvas canvas, int horizontalMargin, int verticalMargin, int widthOfCanvas, int heightOfCanvas) {
@@ -549,11 +793,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     private void setLimitsOfControls(){
 
-        if(dataRepository == null){
-            dataRepository = ((BasicApp) getApplication()).getRepository();
-        }
-
         executors.storageIO().execute(() -> {
+
+            if(dataRepository == null){
+                dataRepository = ((BasicApp) getApplication()).getRepository();
+            }
 
             long oldestTimeMs = dataRepository.getOldestTimeMsSync();
             long newestTimeMs = dataRepository.getNewestTimeMsSync();
@@ -562,7 +806,9 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                 setLimitsOfControls(oldestTimeMs, newestTimeMs, findViewById(R.id.controlsStartTime));
                 setLimitsOfControls(oldestTimeMs, newestTimeMs, findViewById(R.id.controlsEndTime));
-                setValuesOfControls(oldestTimeMs, newestTimeMs, findViewById(R.id.controlsStartTime), findViewById(R.id.controlsEndTime));
+
+                setValuesOfStartTimeControls(oldestTimeMs, findViewById(R.id.controlsStartTime));
+                setValuesOfEndTimeControls(newestTimeMs, findViewById(R.id.controlsEndTime));
 
             });
 
@@ -623,19 +869,14 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     }
 
-
-    private void setValuesOfControls(long oldestTimeMs, long newestTimeMs, View viewByIdStartTime, View viewByIdEndTime) {
+    private void setValuesOfStartTimeControls(long oldestTimeMs, View viewByIdStartTime) {
 
         Date oldestDate = new Date(oldestTimeMs);
-        Date newestDate = new Date(newestTimeMs);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.controls_time_format));
         String oldestDateFormatted = simpleDateFormat.format(oldestDate);
-        String newestDateFormatted = simpleDateFormat.format(newestDate);
 
         String[] oldestDateFormattedSplitted = oldestDateFormatted.split(getString(R.string.controls_string_split_str));
-        String[] newestDateFormattedSplitted = newestDateFormatted.split(getString(R.string.controls_string_split_str));
-
 
         //Year
         int startYear = Integer.parseInt(oldestDateFormattedSplitted[0]);
@@ -643,10 +884,6 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startYear);
         startDate.setYear(startYear);
 
-        int endYear = Integer.parseInt(newestDateFormattedSplitted[0]);
-        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerYear)
-                .findViewById(R.id.numberPicker)).setValue(endYear);
-        endDate.setYear(endYear);
 
         //Month
         int startMonth = Integer.parseInt(oldestDateFormattedSplitted[1]);
@@ -654,10 +891,6 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startMonth);
         startDate.setMonth(startMonth);
 
-        int endMonth = Integer.parseInt(newestDateFormattedSplitted[1]);
-        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerMonth)
-                .findViewById(R.id.numberPicker)).setValue(endMonth);
-        endDate.setMonth(endMonth);
 
         //Day
         int startDay = Integer.parseInt(oldestDateFormattedSplitted[2]);
@@ -665,10 +898,6 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startDay);
         startDate.setDay(startDay);
 
-        int endDay = Integer.parseInt(newestDateFormattedSplitted[2]);
-        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerDay)
-                .findViewById(R.id.numberPicker)).setValue(endDay);
-        endDate.setDay(endDay);
 
         //Hour
         int startHour = Integer.parseInt(oldestDateFormattedSplitted[3]);
@@ -676,10 +905,6 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startHour);
         startDate.setHour(startHour);
 
-        int endHour = Integer.parseInt(newestDateFormattedSplitted[3]);
-        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerHour)
-                .findViewById(R.id.numberPicker)).setValue(endHour);
-        endDate.setHour(endHour);
 
         //Minute
         int startMinute = Integer.parseInt(oldestDateFormattedSplitted[4]);
@@ -687,10 +912,6 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startMinute);
         startDate.setMinute(startMinute);
 
-        int endMinute = Integer.parseInt(newestDateFormattedSplitted[4]);
-        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerMinute)
-                .findViewById(R.id.numberPicker)).setValue(endMinute);
-        endDate.setMinute(endMinute);
 
         //Second
         int startSecond = Integer.parseInt(oldestDateFormattedSplitted[5]);
@@ -698,13 +919,64 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                 .findViewById(R.id.numberPicker)).setValue(startSecond);
         startDate.setSecond(startSecond);
 
+
+        //Millisecond
+        startDate.setMillisecond(0);
+
+    }
+
+
+    private void setValuesOfEndTimeControls(long newestTimeMs, View viewByIdEndTime) {
+
+        Date newestDate = new Date(newestTimeMs);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.controls_time_format));
+        String newestDateFormatted = simpleDateFormat.format(newestDate);
+
+        String[] newestDateFormattedSplitted = newestDateFormatted.split(getString(R.string.controls_string_split_str));
+
+
+        //Year
+        int endYear = Integer.parseInt(newestDateFormattedSplitted[0]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerYear)
+                .findViewById(R.id.numberPicker)).setValue(endYear);
+        endDate.setYear(endYear);
+
+        //Month
+        int endMonth = Integer.parseInt(newestDateFormattedSplitted[1]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerMonth)
+                .findViewById(R.id.numberPicker)).setValue(endMonth);
+        endDate.setMonth(endMonth);
+
+        //Day
+        int endDay = Integer.parseInt(newestDateFormattedSplitted[2]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerDay)
+                .findViewById(R.id.numberPicker)).setValue(endDay);
+        endDate.setDay(endDay);
+
+        //Hour
+        int endHour = Integer.parseInt(newestDateFormattedSplitted[3]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerHour)
+                .findViewById(R.id.numberPicker)).setValue(endHour);
+        endDate.setHour(endHour);
+
+        //Minute
+        int endMinute = Integer.parseInt(newestDateFormattedSplitted[4]);
+        ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerMinute)
+                .findViewById(R.id.numberPicker)).setValue(endMinute);
+        endDate.setMinute(endMinute);
+
+        //Second
         int endSecond = Integer.parseInt(newestDateFormattedSplitted[5]);
         ((NumberPicker) viewByIdEndTime.findViewById(R.id.appLocationNumberPickerSecond)
                 .findViewById(R.id.numberPicker)).setValue(endSecond);
         endDate.setSecond(endSecond);
 
-        startDate.setMillisecond(0);
+
+        //Millisecond
         endDate.setMillisecond(999);
+
+
     }
 
 
