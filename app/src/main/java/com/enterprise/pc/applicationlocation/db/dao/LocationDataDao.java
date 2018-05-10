@@ -44,4 +44,7 @@ public interface LocationDataDao {
     @Query("select * from locationdata where id >= :startId and id <= :endId")
     List<LocationData> getLocationDataBetweenStartAndEndTimeSync(long startId, long endId);
 
+    @Query("select * from locationdata where information != '' ")
+    List<LocationData> getLocationDataHavingInformationSync();
+
 }

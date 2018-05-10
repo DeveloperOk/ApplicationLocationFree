@@ -26,7 +26,8 @@
         </activity>
         <activity android:name=".LocationGraphActivity" />
         <activity android:name=".DataExportActivity" />
-        <activity android:name=".DataAddInformationActivity"></activity>
+        <activity android:name=".DataAddInformationActivity" />
+        <activity android:name=".ListDataActivity"></activity>
     </application>
 
 </manifest>

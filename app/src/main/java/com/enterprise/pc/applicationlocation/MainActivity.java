@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity{
     Button buttonGraph;
     Button buttonExport;
     Button buttonAdd;
+    Button buttonList;
 
     TextView textViewTimeValue;
     TextView textViewLatitudeValue;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity{
         buttonGraph = (Button)findViewById(R.id.buttonGraph);
         buttonExport = (Button)findViewById(R.id.buttonExport);
         buttonAdd = (Button)findViewById(R.id.buttonAdd);
+        buttonList = (Button)findViewById(R.id.buttonList);
 
         executors.storageIO().execute(() -> {
 
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity{
         addGraphButtonListener();
         addExportButtonListener();
         addAddButtonListener();
+        addListButtonListener();
 
     }
 
@@ -153,19 +156,19 @@ public class MainActivity extends AppCompatActivity{
                 textViewAltitudeValue.setText(altitude);
             }
 
-            String speed = Double.toString(locationDataElement.getSpeed());
+            String speed = Float.toString(locationDataElement.getSpeed());
 
             if(speed != null){
                 textViewSpeedValue.setText(speed);
             }
 
-            String accuracy = Double.toString(locationDataElement.getAccuracy());
+            String accuracy = Float.toString(locationDataElement.getAccuracy());
 
             if(accuracy != null){
                 textViewAccuracyValue.setText(accuracy);
             }
 
-            String bearing = Double.toString(locationDataElement.getBearing());
+            String bearing = Float.toString(locationDataElement.getBearing());
 
             if(bearing != null){
                 textViewBearingValue.setText(bearing);
@@ -252,6 +255,21 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
+    private void addListButtonListener() {
+
+        buttonList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vw) {
+
+                Intent intent = new Intent(getApplicationContext(), ListDataActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
 
     private void addListenerForGPS() {
 

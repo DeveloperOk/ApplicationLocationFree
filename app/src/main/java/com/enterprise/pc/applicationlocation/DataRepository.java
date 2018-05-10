@@ -69,4 +69,8 @@ public class DataRepository {
         return  mDatabase.locationDataDao().loadLocationDataHavingNewestTimeSync();
     }
 
+    public List<LocationData> getLocationDataHavingInformationSync(){
+        return  mDatabase.locationDataDao().getLocationDataHavingInformationSync();
+    }
+
 }

@@ -180,19 +180,19 @@ public class DataAddInformationActivity extends AppCompatActivity {
                 textViewAltitudeValue.setText(altitude);
             }
 
-            String speed = Double.toString(locationDataElement.getSpeed());
+            String speed = Float.toString(locationDataElement.getSpeed());
 
             if(speed != null){
                 textViewSpeedValue.setText(speed);
             }
 
-            String accuracy = Double.toString(locationDataElement.getAccuracy());
+            String accuracy = Float.toString(locationDataElement.getAccuracy());
 
             if(accuracy != null){
                 textViewAccuracyValue.setText(accuracy);
             }
 
-            String bearing = Double.toString(locationDataElement.getBearing());
+            String bearing = Float.toString(locationDataElement.getBearing());
 
             if(bearing != null){
                 textViewBearingValue.setText(bearing);

@@ -9,6 +9,7 @@
     <string name="button_stop">Stop</string>
     <string name="button_export">Export</string>
     <string name="button_add">Add</string>
+    <string name="button_list">List</string>
 
     <string name="dateFormat">yyyy-MM-dd HH:mm:ss.SSS--zzzz EEEE</string>
     <string name="str_old_value">--</string>
@@ -75,6 +76,7 @@
     <string name="accuracy_label">Accuracy</string>
     <string name="bearing_label">Bearing</string>
     <string name="provider_label">Provider</string>
+    <string name="information_label">Information</string>
     <string name="punctuation_mark_colon_and_space">" :  "</string>
 
     <string name="data_export_activity_title">Data Export</string>
@@ -108,11 +110,13 @@
 
     <string name="button_start_location_graph">Start</string>
     <string name="button_stop_location_graph">Stop</string>
-    
+
     <string name="toggle_live_graph_text">Live Graph</string>
     <string name="toggle_button_live_graph_on_text">Enabled</string>
     <string name="toggle_button_live_graph_off_text">Disabled</string>
 
     <string name="button_set_start_time">Set Start Time to Current Time</string>
+
+    <string name="list_data_activity_title">List Data</string>
 
 </resources>
