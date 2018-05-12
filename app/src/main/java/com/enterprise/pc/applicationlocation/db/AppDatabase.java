@@ -109,4 +109,31 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
 
+    public static void delete(final AppDatabase database, final LocationData locationData) {
+
+        if(database != null && locationData != null){
+
+            database.runInTransaction(() -> {
+                database.locationDataDao().delete(locationData);
+
+            });
+
+        }
+
+    }
+
+
+    public static void update(final AppDatabase database, final LocationData locationData) {
+
+        if(database != null && locationData != null){
+
+            database.runInTransaction(() -> {
+                database.locationDataDao().update(locationData);
+
+            });
+
+        }
+
+    }
+
 }

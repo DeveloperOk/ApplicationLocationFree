@@ -118,5 +118,25 @@
     <string name="button_set_start_time">Set Start Time to Current Time</string>
 
     <string name="list_data_activity_title">List Data</string>
+    <string name="list_data_activity_button_delete">Delete</string>
+    <string name="list_data_activity_button_update">Update</string>
+
+    <string name="list_data_delete_completed_dialog_title">Information</string>
+    <string name="list_data_delete_completed_dialog_message">Deleted.</string>
+    <string name="list_data_delete_completed_dialog_neutral_button">OK</string>
+
+    <string name="list_data_delete_started_dialog_title">Information</string>
+    <string name="list_data_delete_started_dialog_message">Are you sure you want to delete?</string>
+    <string name="list_data_delete_started_dialog_negative_button">Cancel</string>
+    <string name="list_data_delete_started_dialog_positive_button">OK</string>
+
+    <string name="activity_data_update_information_textview_information">Information</string>
+    <string name="activity_data_update_information_button_clear">Clear</string>
+    <string name="activity_data_update_information_button_update">Update</string>
+    <string name="activity_data_update_information_title">Update Information</string>
+
+    <string name="activity_data_update_information_dialog_title">Information</string>
+    <string name="activity_data_update_information_dialog_message">Updated.</string>
+    <string name="activity_data_update_information_dialog_neutral_button">OK</string>
 
 </resources>

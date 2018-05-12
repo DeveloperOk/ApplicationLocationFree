@@ -12,4 +12,6 @@ public class AppConstants {
 
     public static final int DatabaseReadSleepDurationMillisecond = 1000;
 
+    public static final String LocationDataToUpdate = "LocationDataToUpdate";
+
 }

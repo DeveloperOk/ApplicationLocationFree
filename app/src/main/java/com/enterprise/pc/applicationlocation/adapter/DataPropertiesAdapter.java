@@ -22,17 +22,37 @@ public class DataPropertiesAdapter extends RecyclerView.Adapter<DataPropertiesAd
     private List<LocationData> locationDataList;
     private Context context;
 
+    private static ClickListener clickListener;
+
+    public void setItemClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ConstraintLayout constraintLayout;
 
         public ViewHolder(ConstraintLayout constraintLayout) {
             super(constraintLayout);
+            constraintLayout.setOnClickListener(this);
             this.constraintLayout = constraintLayout;
         }
+
+        @Override
+        public void onClick(View view){
+
+            clickListener.onItemClick(view, getAdapterPosition());
+
+        }
+
+    }
+
+    public interface ClickListener {
+
+        void onItemClick(View view, int position);
 
     }
 
@@ -67,40 +87,52 @@ public class DataPropertiesAdapter extends RecyclerView.Adapter<DataPropertiesAd
 
             if(locationData != null){
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewTimeValue))
-                        .setText(locationData.getFormattedTime()
-                                .replace(context.getString(R.string.str_old_value), context.getString(R.string.str_new_value)));
+                if(holder!= null ){
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewLatitudeValue))
-                        .setText(Double.toString(locationData.getLatitude()));
+                    if(holder.constraintLayout != null){
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewLongitudeValue))
-                        .setText(Double.toString(locationData.getLongitude()));
+                        holder.constraintLayout.findViewById(R.id.buttonDelete).setVisibility(View.GONE);
+                        holder.constraintLayout.findViewById(R.id.buttonUpdate).setVisibility(View.GONE);
+                        holder.constraintLayout.findViewById(R.id.spaceBottom).setVisibility(View.GONE);
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewAltitudeValue))
-                        .setText(Double.toString(locationData.getAltitude()));
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewTimeValue))
+                                .setText(locationData.getFormattedTime()
+                                        .replace(context.getString(R.string.str_old_value), context.getString(R.string.str_new_value)));
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewAccuracyValue))
-                        .setText(Float.toString(locationData.getAccuracy()));
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewLatitudeValue))
+                                .setText(Double.toString(locationData.getLatitude()));
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewSpeedValue))
-                        .setText(Float.toString(locationData.getSpeed()));
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewLongitudeValue))
+                                .setText(Double.toString(locationData.getLongitude()));
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewBearingValue))
-                        .setText(Float.toString(locationData.getBearing()));
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewAltitudeValue))
+                                .setText(Double.toString(locationData.getAltitude()));
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewProviderValue))
-                        .setText(locationData.getProvider());
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewAccuracyValue))
+                                .setText(Float.toString(locationData.getAccuracy()));
 
-                setVisibilityOfInformationView(holder.constraintLayout);
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewSpeedValue))
+                                .setText(Float.toString(locationData.getSpeed()));
 
-                ((TextView)holder.constraintLayout.findViewById(R.id.textViewInformationValue))
-                        .setText(locationData.getInformation());
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewBearingValue))
+                                .setText(Float.toString(locationData.getBearing()));
+
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewProviderValue))
+                                .setText(locationData.getProvider());
+
+                        setVisibilityOfInformationView(holder.constraintLayout);
+
+                        ((TextView)holder.constraintLayout.findViewById(R.id.textViewInformationValue))
+                                .setText(locationData.getInformation());
+
+                    }
+                }
 
             }
         }
 
     }
+
 
     private void setVisibilityOfInformationView(ConstraintLayout constraintLayout) {
 
@@ -110,6 +142,8 @@ public class DataPropertiesAdapter extends RecyclerView.Adapter<DataPropertiesAd
             ((TextView) constraintLayout.findViewById(R.id.textViewInformationValue)).setVisibility(View.VISIBLE);
         }
     }
+
+
 
 
     // Return the size of your dataset (invoked by the layout manager)

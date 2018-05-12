@@ -12,10 +12,10 @@ import android.widget.TextView;
 import com.enterprise.pc.applicationlocation.db.AppDatabase;
 import com.enterprise.pc.applicationlocation.db.entity.LocationData;
 
-public class DataAddInformationActivity extends AppCompatActivity {
+public class DataUpdateInformationActivity extends AppCompatActivity {
 
     Button buttonClear;
-    Button buttonAdd;
+    Button buttonDataUpdate;
 
     TextView textViewTimeValue;
     TextView textViewLatitudeValue;
@@ -31,54 +31,49 @@ public class DataAddInformationActivity extends AppCompatActivity {
     AppExecutors executors;
     AppDatabase appDatabase;
 
-    LocationData currentLocationData;
+    LocationData locationDataToUpdate;
 
     AlertDialog.Builder alertDialogBuilder;
     AlertDialog alertDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_add_information);
+        setContentView(R.layout.activity_data_update_information);
 
-        setTitle(R.string.data_add_information_activity_title);
+        setTitle(R.string.activity_data_update_information_title);
 
         executors = new AppExecutors();
 
-        currentLocationData = getIntent().getParcelableExtra(AppConstants.CurrentLocationData);
+        locationDataToUpdate = getIntent().getParcelableExtra(AppConstants.LocationDataToUpdate);
 
         initializeTextViews();
-        setTextsOfTextViews(currentLocationData);
+        setTextsOfTextViews(locationDataToUpdate);
 
-        editTextInformation = (EditText) findViewById(R.id.editTextInformation);
-
-        executors.storageIO().execute(() -> {
-
-            appDatabase = ((BasicApp) getApplication()).getDatabase();
-        });
+        initializeAndSetEditText();
 
         buttonClear = (Button)findViewById(R.id.buttonClear);
-        buttonAdd = (Button)findViewById(R.id.buttonAdd);
+        buttonDataUpdate = (Button)findViewById(R.id.buttonDataUpdate);
 
         addButtonListeners();
 
-        instantiateAlertDialog();
-
     }
 
-    private void instantiateAlertDialog() {
+    private void initializeAndSetEditText() {
 
-        alertDialogBuilder = new AlertDialog.Builder(this);
+        editTextInformation = (EditText) findViewById(R.id.editTextInformation);
 
-        alertDialogBuilder.setTitle(R.string.add_information_dialog_title);
-        alertDialogBuilder.setMessage(R.string.add_information_dialog_message);
-        alertDialogBuilder.setNeutralButton(R.string.add_information_dialog_neutral_button, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        if(locationDataToUpdate != null){
 
+            String information = locationDataToUpdate.getInformation();
+            if(information != null){
+                editTextInformation.setText(information);
+            }else{
+                editTextInformation.setText("");
             }
-        });
 
-        alertDialog = alertDialogBuilder.create();
+        }
 
     }
 
@@ -97,7 +92,7 @@ public class DataAddInformationActivity extends AppCompatActivity {
     private void addButtonListeners() {
 
         addClearButtonListener();
-        addAddButtonListener();
+        addUpdateButtonListener();
 
     }
 
@@ -114,26 +109,26 @@ public class DataAddInformationActivity extends AppCompatActivity {
 
     }
 
-    private void addAddButtonListener() {
+    private void addUpdateButtonListener() {
 
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        buttonDataUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View vw) {
 
-                addInformation();
+                updateInformation();
 
             }
         });
 
     }
 
-    private void addInformation(){
+    private void updateInformation(){
 
         String information = editTextInformation.getText().toString();
 
-        if(currentLocationData != null && information != null){
+        if(locationDataToUpdate != null && information != null){
 
-            currentLocationData.setInformation(information);
+            locationDataToUpdate.setInformation(information);
 
             executors.storageIO().execute(() -> {
 
@@ -141,18 +136,17 @@ public class DataAddInformationActivity extends AppCompatActivity {
                     appDatabase = ((BasicApp) getApplication()).getDatabase();
                 }
 
-                AppDatabase.insert(appDatabase, currentLocationData);
+                AppDatabase.update(appDatabase, locationDataToUpdate);
 
                 executors.mainThread().execute(() -> {
 
-                    alertDialog.show();
+                    instantiateAlertDialogAndShow();
                 });
 
             });
         }
 
     }
-
 
     private void setTextsOfTextViews(LocationData locationDataElement) {
 
@@ -207,6 +201,24 @@ public class DataAddInformationActivity extends AppCompatActivity {
             }
 
         }
+
+    }
+
+    private void instantiateAlertDialogAndShow() {
+
+        alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setTitle(R.string.activity_data_update_information_dialog_title);
+        alertDialogBuilder.setMessage(R.string.activity_data_update_information_dialog_message);
+        alertDialogBuilder.setNeutralButton(R.string.activity_data_update_information_dialog_neutral_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
 
     }
 

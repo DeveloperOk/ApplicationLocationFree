@@ -246,7 +246,36 @@
         app:layout_constraintLeft_toRightOf="@+id/textViewInformationLabelPunctuation"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewInformationLabel" />
 
+    <Button
+        android:id="@+id/buttonDelete"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorButton"
+        android:text="@string/list_data_activity_button_delete"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/buttonUpdate"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInformationValue" />
 
+    <Button
+        android:id="@+id/buttonUpdate"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="@color/colorButton"
+        android:text="@string/list_data_activity_button_update"
+        app:layout_constraintLeft_toRightOf="@+id/buttonDelete"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonDelete" />
 
+    <Space
+        android:id="@+id/spaceBottom"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDelete" />
 
 </android.support.constraint.ConstraintLayout>

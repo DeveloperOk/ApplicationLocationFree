@@ -71,12 +71,19 @@ public class MainActivity extends AppCompatActivity{
 
         appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
 
-        setLocationDataOnCreate();
+        setLocationDataOnCreateAndOnResume();
 
         addListeners();
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setLocationDataOnCreateAndOnResume();
+
+    }
 
     private void initializeTextViews() {
         textViewTimeValue = (TextView) findViewById(R.id.textViewTimeValue);
@@ -107,7 +114,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private void setLocationDataOnCreate() {
+    private void setLocationDataOnCreateAndOnResume() {
 
         executors.storageIO().execute(() -> {
 
