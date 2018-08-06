@@ -10,6 +10,7 @@
         android:id="@+id/surfaceViewGraphOutlineOuterUpperPart"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/colorWhite"
         android:layout_width="0dp"
         android:layout_height="0dp"
         tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity"
@@ -21,269 +22,278 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/surfaceViewGraphOutlineOuterLowerPart"
         app:layout_constraintVertical_chainStyle="spread"
-        app:layout_constraintVertical_weight="5"
-        android:orientation="horizontal">
+        app:layout_constraintVertical_weight="5">
 
-
-        <TextView
-            android:id="@+id/textViewInvisibleForSpaceAllocationOneOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/graph_constant_width_string_longitude"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneTwo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="2dp"
-            android:visibility="invisible"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1" />
-
-        <TextView
-            android:id="@+id/textViewMinLongitudeLineOne"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintDimensionRatio="1:1"
-            android:gravity="top|center"
-            android:text="@string/graph_longitude_min_header"
-            android:textColor="@color/colorBlack"
-            android:rotation="270"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"/>
-
-        <TextView
-            android:id="@+id/textViewInvisibleForSpaceAllocationOneTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/graph_constant_width_string_longitude"
-            app:layout_constraintLeft_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneOne"
-            app:layout_constraintRight_toLeftOf="@+id/surfaceViewGraphOutlineVerticalPart"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="0dp"
-            android:visibility="invisible"
-            app:layout_constraintHorizontal_weight="1" />
-
-        <TextView
-            android:id="@+id/textViewMinLongitudeLineTwo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintDimensionRatio="1:1"
-            android:gravity="top|center"
-            android:text="@string/graph_longitude_min"
-            android:textColor="@color/colorBlack"
-            android:rotation="270"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationOneOne"
-            android:layout_marginLeft="1dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"/>
-
-
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/surfaceViewGraphOutlineVerticalPart"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationOneTwo"
-            app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationTwoOne"
-            android:layout_marginLeft="1dp"
-            app:layout_constraintHorizontal_weight="18" >
-
-            <TextView
-                android:id="@+id/textViewLatitudeSpaceAllocationOneOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_constant_width_string_latitude"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationOneTwo"
-                android:layout_marginTop="2dp"
-                app:layout_constraintVertical_chainStyle="spread"
-                app:layout_constraintVertical_weight="1"/>
-
-            <TextView
-                android:id="@+id/textViewMaxLatitudeLineOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_max_header"
-                android:textColor="@color/colorBlack"
-                android:gravity="top|center"
-                android:background="@color/colorWhite"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="2dp" />
-
-            <TextView
-                android:id="@+id/textViewLatitudeSpaceAllocationOneTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_constant_width_string_latitude"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneOne"
-                app:layout_constraintBottom_toTopOf="@+id/surfaceViewGraph"
-                android:layout_marginTop="1dp"
-                app:layout_constraintVertical_weight="1"/>
-
-            <TextView
-                android:id="@+id/textViewMaxLatitudeLineTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_max"
-                android:textColor="@color/colorBlack"
-                android:gravity="top|center"
-                android:background="@color/colorWhite"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneOne"
-                android:layout_marginTop="1dp" />
-
-            <SurfaceView
-                android:id="@+id/surfaceViewGraph"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneTwo"
-                app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
-                android:layout_marginTop="1dp"
-                app:layout_constraintVertical_weight="18" />
-
-            <TextView
-                android:id="@+id/textViewLatitudeSpaceAllocationTwoOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_constant_width_string_latitude"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/surfaceViewGraph"
-                app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationTwoTwo"
-                android:layout_marginTop="1dp"
-                app:layout_constraintVertical_weight="1"/>
-
-            <TextView
-                android:id="@+id/textViewMinLatitudeLineOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_min_header"
-                android:textColor="@color/colorBlack"
-                android:gravity="top|center"
-                android:background="@color/colorWhite"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/surfaceViewGraph"
-                android:layout_marginTop="1dp" />
-
-            <TextView
-                android:id="@+id/textViewLatitudeSpaceAllocationTwoTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_constant_width_string_latitude"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="2dp"
-                app:layout_constraintVertical_weight="1"/>
-
-            <TextView
-                android:id="@+id/textViewMinLatitudeLineTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/graph_latitude_min"
-                android:textColor="@color/colorBlack"
-                android:gravity="top|center"
-                android:background="@color/colorWhite"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="2dp" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-        <TextView
-            android:id="@+id/textViewInvisibleForSpaceAllocationTwoOne"
+            android:id="@+id/scrollViewUpperPart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/graph_constant_width_string_longitude"
-            android:rotation="270"
-            app:layout_constraintLeft_toRightOf="@+id/surfaceViewGraphOutlineVerticalPart"
-            app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationTwoTwo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="1dp"
-            app:layout_constraintHorizontal_weight="1"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/textViewMaxLongitudeLineOne"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintDimensionRatio="1:1"
-            android:gravity="top|center"
-            android:layout_marginLeft="1dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:rotation="270"
-            android:text="@string/graph_longitude_max_header"
-            android:textColor="@color/colorBlack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/surfaceViewGraphOutlineVerticalPart" />
-
-        <TextView
-            android:id="@+id/textViewInvisibleForSpaceAllocationTwoTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/graph_constant_width_string_longitude"
-            android:rotation="270"
-            app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationTwoOne"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="2dp"
-            app:layout_constraintHorizontal_weight="1"
-            android:visibility="invisible" />
+            tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity" >
 
-        <TextView
-            android:id="@+id/textViewMaxLongitudeLineTwo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintDimensionRatio="1:1"
-            android:gravity="top|center"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:rotation="270"
-            android:text="@string/graph_longitude_max"
-            android:textColor="@color/colorBlack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationTwoOne" />
+            <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/horizontalScrollViewUpperPart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/constraintLayoutGraphPart"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textViewInvisibleForSpaceAllocationOneOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="270"
+                        android:text="@string/graph_constant_width_string_longitude"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneTwo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/textViewMinLongitudeLineOne"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:gravity="top|center"
+                        android:text="@string/graph_longitude_min_header"
+                        android:textColor="@color/colorBlack"
+                        android:rotation="270"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneOne"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:id="@+id/textViewInvisibleForSpaceAllocationOneTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="270"
+                        android:layout_marginLeft="1dp"
+                        android:text="@string/graph_constant_width_string_longitude"
+                        app:layout_constraintLeft_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneOne"
+                        app:layout_constraintRight_toLeftOf="@+id/surfaceViewGraphOutlineVerticalPart"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/textViewMinLongitudeLineTwo"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:gravity="top|center"
+                        android:text="@string/graph_longitude_min"
+                        android:textColor="@color/colorBlack"
+                        android:rotation="270"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@+id/textViewInvisibleForSpaceAllocationOneTwo"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"/>
+
+                    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/surfaceViewGraphOutlineVerticalPart"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:context="com.enterprise.pc.applicationlocation.LocationGraphActivity"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationOneTwo"
+                        app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationTwoOne"
+                        android:layout_marginLeft="1dp" >
+
+                        <TextView
+                            android:id="@+id/textViewLatitudeSpaceAllocationOneOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_constant_width_string_latitude"
+                            android:visibility="invisible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationOneTwo"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMaxLatitudeLineOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_latitude_max_header"
+                            android:textColor="@color/colorBlack"
+                            android:gravity="top|center"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:id="@+id/textViewLatitudeSpaceAllocationOneTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_constant_width_string_latitude"
+                            android:visibility="invisible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneOne"
+                            app:layout_constraintBottom_toTopOf="@+id/surfaceViewGraph"
+                            android:layout_marginTop="1dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMaxLatitudeLineTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_latitude_max"
+                            android:textColor="@color/colorBlack"
+                            android:gravity="top|center"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneOne"
+                            android:layout_marginTop="1dp" />
+
+                        <SurfaceView
+                            android:id="@+id/surfaceViewGraph"
+                            android:layout_width="400dp"
+                            android:layout_height="400dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationOneTwo"
+                            app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
+                            android:layout_marginTop="1dp" />
+
+                        <TextView
+                            android:id="@+id/textViewLatitudeSpaceAllocationTwoOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_constant_width_string_latitude"
+                            android:visibility="invisible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/surfaceViewGraph"
+                            app:layout_constraintBottom_toTopOf="@+id/textViewLatitudeSpaceAllocationTwoTwo"
+                            android:layout_marginTop="1dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMinLatitudeLineOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_latitude_min_header"
+                            android:textColor="@color/colorBlack"
+                            android:gravity="top|center"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/surfaceViewGraph"
+                            android:layout_marginTop="1dp" />
+
+                        <TextView
+                            android:id="@+id/textViewLatitudeSpaceAllocationTwoTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_constant_width_string_latitude"
+                            android:visibility="invisible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="2dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMinLatitudeLineTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/graph_latitude_min"
+                            android:textColor="@color/colorBlack"
+                            android:gravity="top|center"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewLatitudeSpaceAllocationTwoOne"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="2dp" />
+
+
+                    </android.support.constraint.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/textViewInvisibleForSpaceAllocationTwoOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/graph_constant_width_string_longitude"
+                        android:rotation="270"
+                        app:layout_constraintLeft_toRightOf="@+id/surfaceViewGraphOutlineVerticalPart"
+                        app:layout_constraintRight_toLeftOf="@+id/textViewInvisibleForSpaceAllocationTwoTwo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginLeft="1dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/textViewMaxLongitudeLineOne"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:gravity="bottom|center"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:rotation="270"
+                        android:text="@string/graph_longitude_max_header"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="@+id/textViewInvisibleForSpaceAllocationTwoOne" />
+
+                    <TextView
+                        android:id="@+id/textViewInvisibleForSpaceAllocationTwoTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="270"
+                        android:layout_marginLeft="1dp"
+                        android:text="@string/graph_constant_width_string_longitude"
+                        android:visibility="invisible"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/textViewInvisibleForSpaceAllocationTwoOne"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textViewMaxLongitudeLineTwo"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:gravity="bottom|center"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:rotation="270"
+                        android:text="@string/graph_longitude_max"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="@+id/textViewInvisibleForSpaceAllocationTwoTwo" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </HorizontalScrollView>
+
+        </ScrollView>
 
         <include android:id="@+id/graph_layout_border"
             android:layout_width="match_parent"
