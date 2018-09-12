@@ -9,6 +9,9 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -33,6 +36,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
     LocationDataViewModel locationDataViewModel;
 
     SurfaceView surfaceView;
+    private ScaleGestureDetector scaleDetectorGraph;
+    private ScaleGestureDetector.OnScaleGestureListener scaleGestureListener;
+
+    private GestureDetector gestureDetector;
+    private GestureDetector.SimpleOnGestureListener gestureListener;
 
     AppExecutors executors;
 
@@ -110,7 +118,124 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         removeLocationListenerOnCreate();
 
+        initializeScrollGraph();
+        initializeScaleGraph();
+
     }
+
+    private void initializeScrollGraph() {
+
+        gestureListener
+                = new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                    float distanceX, float distanceY) {
+
+                findViewById(R.id.constraintLayoutGraphPart).setPadding(
+                        findViewById(R.id.constraintLayoutGraphPart).getPaddingLeft() - (int) distanceX,
+                        findViewById(R.id.constraintLayoutGraphPart).getPaddingTop() - (int) distanceY,
+                        findViewById(R.id.constraintLayoutGraphPart).getPaddingRight(),
+                        findViewById(R.id.constraintLayoutGraphPart).getPaddingBottom()
+                );
+
+                findViewById(R.id.constraintLayoutGraphPart).requestLayout();
+
+                return true;
+            }
+
+        };
+
+        gestureDetector = new GestureDetector(surfaceView.getContext(), gestureListener);
+
+    }
+
+    private void initializeScaleGraph() {
+
+        scaleGestureListener
+                = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+            private float lastSpanX;
+            private float lastSpanY;
+
+            @Override
+            public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+                lastSpanX = scaleGestureDetector.
+                        getCurrentSpanX();
+                lastSpanY = scaleGestureDetector.
+                        getCurrentSpanY();
+                return true;
+            }
+
+            @Override
+            public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+
+
+                float spanX = scaleGestureDetector.
+                        getCurrentSpanX();
+                float spanY = scaleGestureDetector.
+                        getCurrentSpanY();
+
+                float widthScale = spanX / lastSpanX;
+                widthScale = Math.max(0.9f, Math.min(widthScale, 1.1f));
+
+                float heightScale = spanY / lastSpanY;
+                heightScale = Math.max(0.9f, Math.min(heightScale, 1.1f));
+
+
+                int minWidth= 40;
+                int scaledWidth = (int)(surfaceView.getLayoutParams().width * widthScale);
+                if(scaledWidth < minWidth){
+                    surfaceView.getLayoutParams().width = minWidth;
+                }else{
+                    surfaceView.getLayoutParams().width = scaledWidth;
+                }
+
+
+                int minHeigth= 40;
+                int scaledHeight = (int)(surfaceView.getLayoutParams().height * heightScale);
+                if(scaledHeight < minHeigth){
+                    surfaceView.getLayoutParams().height = minHeigth;
+                }else{
+                    surfaceView.getLayoutParams().height = scaledHeight;
+                }
+
+
+                TextView textViewInvisibleForLongitudeSpaceAllocationOneOne = (TextView) findViewById(R.id.textViewInvisibleForLongitudeSpaceAllocationOneOne);
+
+                int widthOfSpaceForText = 8 * textViewInvisibleForLongitudeSpaceAllocationOneOne.getMeasuredWidth();
+                int heightOfSpaceForText = 8 * textViewInvisibleForLongitudeSpaceAllocationOneOne.getMeasuredHeight();
+
+                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).getLayoutParams().width
+                        = surfaceView.getLayoutParams().width;
+                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).getLayoutParams().height
+                        = surfaceView.getLayoutParams().height + heightOfSpaceForText;
+
+                findViewById(R.id.constraintLayoutGraphPart).getLayoutParams().width
+                        = surfaceView.getLayoutParams().width + widthOfSpaceForText;
+                findViewById(R.id.constraintLayoutGraphPart).getLayoutParams().height
+                        = surfaceView.getLayoutParams().height + heightOfSpaceForText;
+
+                findViewById(R.id.constraintLayoutGraphPart).requestLayout();
+                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).requestLayout();
+                surfaceView.requestLayout();
+
+                return true;
+            }
+        };
+
+        scaleDetectorGraph = new ScaleGestureDetector(surfaceView.getContext(), scaleGestureListener);
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean retVal = scaleDetectorGraph.onTouchEvent(event);
+        retVal = gestureDetector.onTouchEvent(event) || retVal;
+        return retVal || super.onTouchEvent(event);
+
+    }
+
 
     private void removeLocationListenerOnCreate(){
 
