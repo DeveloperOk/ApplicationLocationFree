@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -46,10 +47,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     DataRepository dataRepository;
 
-    TextView textViewMinLongitudeLineTwo;
-    TextView textViewMaxLongitudeLineTwo;
-    TextView textViewMinLatitudeLineTwo;
-    TextView textViewMaxLatitudeLineTwo;
+    TextView textViewMinLongitudeValue;
+    TextView textViewMaxLongitudeValue;
+    TextView textViewMinLatitudeValue;
+    TextView textViewMaxLatitudeValue;
 
     DateInformation startDate;
     DateInformation endDate;
@@ -75,6 +76,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     Button buttonSetStartTime;
 
+    boolean scalingInProgress = false;
+
+    ConstraintLayout surfaceViewGraphOutlineOuterUpperPart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +95,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         surfaceView = (SurfaceView) findViewById(R.id.surfaceViewGraph);
         surfaceView.getHolder().addCallback(this);
 
-        textViewMinLongitudeLineTwo = (TextView) findViewById(R.id.textViewMinLongitudeLineTwo);
-        textViewMaxLongitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLongitudeLineTwo);
-        textViewMinLatitudeLineTwo = (TextView) findViewById(R.id.textViewMinLatitudeLineTwo);
-        textViewMaxLatitudeLineTwo = (TextView) findViewById(R.id.textViewMaxLatitudeLineTwo);
+        textViewMinLongitudeValue = (TextView) findViewById(R.id.textViewMinLongitudeValue);
+        textViewMaxLongitudeValue = (TextView) findViewById(R.id.textViewMaxLongitudeValue);
+        textViewMinLatitudeValue = (TextView) findViewById(R.id.textViewMinLatitudeValue);
+        textViewMaxLatitudeValue = (TextView) findViewById(R.id.textViewMaxLatitudeValue);
 
         DataBindingUtil.inflate(getLayoutInflater(), R.layout.select_date_and_time_layout, findViewById(R.id.controlsStartTime), true);
 
@@ -118,8 +123,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         removeLocationListenerOnCreate();
 
-        initializeScrollGraph();
         initializeScaleGraph();
+        initializeScrollGraph();
+
+        surfaceViewGraphOutlineOuterUpperPart = findViewById(R.id.surfaceViewGraphOutlineOuterUpperPart);
+
 
     }
 
@@ -132,21 +140,28 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
             public boolean onScroll(MotionEvent e1, MotionEvent e2,
                                     float distanceX, float distanceY) {
 
-                findViewById(R.id.constraintLayoutGraphPart).setPadding(
-                        findViewById(R.id.constraintLayoutGraphPart).getPaddingLeft() - (int) distanceX,
-                        findViewById(R.id.constraintLayoutGraphPart).getPaddingTop() - (int) distanceY,
-                        findViewById(R.id.constraintLayoutGraphPart).getPaddingRight(),
-                        findViewById(R.id.constraintLayoutGraphPart).getPaddingBottom()
-                );
+                if(!scalingInProgress){
 
-                findViewById(R.id.constraintLayoutGraphPart).requestLayout();
+                    if(surfaceView != null){
+
+                        surfaceView.setX(surfaceView.getX() - distanceX);
+                        surfaceView.setY(surfaceView.getY() - distanceY);
+                    }
+
+                }
 
                 return true;
             }
 
         };
 
-        gestureDetector = new GestureDetector(surfaceView.getContext(), gestureListener);
+        if(surfaceView != null) {
+
+            if(gestureListener != null) {
+
+                gestureDetector = new GestureDetector(surfaceView.getContext(), gestureListener);
+            }
+        }
 
     }
 
@@ -158,82 +173,241 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
             private float lastSpanX;
             private float lastSpanY;
 
+            float lengthX;
+            float lengthY;
+
+            float scaleFactorX = 1;
+            float scaleFactorY = 1;
+
+            float xOfPointOfInterest;
+            float yOfPointOfInterest;
+
+            float pivotX;
+            float pivotY;
+
+            float maxWidth = 8000;
+            float maxHeight = 8000;
+
+            float minWidth = 10;
+            float minHeight = 10;
+
+            float xOfScaleCenter;
+            float yOfScaleCenter;
+
             @Override
             public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
-                lastSpanX = scaleGestureDetector.
-                        getCurrentSpanX();
-                lastSpanY = scaleGestureDetector.
-                        getCurrentSpanY();
+
+                scalingInProgress = true;
+
+                if(scaleGestureDetector != null){
+
+                    if(surfaceView != null){
+
+                        surfaceView.setPivotX(0);
+                        surfaceView.setPivotY(0);
+
+                        lastSpanX = scaleGestureDetector.
+                                getCurrentSpanX();
+                        lastSpanY = scaleGestureDetector.
+                                getCurrentSpanY();
+
+                        float focusX = scaleGestureDetector.getFocusX();
+                        float focusY = scaleGestureDetector.getFocusY();
+
+                        int[] outLocationSurfaceViewGraphOutlineOuterUpperPart = new int[2];
+
+                        if(surfaceViewGraphOutlineOuterUpperPart != null){
+
+                            surfaceViewGraphOutlineOuterUpperPart.getLocationOnScreen(outLocationSurfaceViewGraphOutlineOuterUpperPart);
+                            float xPositionOfSurfaceViewGraphOutlineOuterUpperPart = outLocationSurfaceViewGraphOutlineOuterUpperPart[0];
+                            float yPositionOfSurfaceViewGraphOutlineOuterUpperPart = outLocationSurfaceViewGraphOutlineOuterUpperPart[1];
+
+                            xOfPointOfInterest = focusX - xPositionOfSurfaceViewGraphOutlineOuterUpperPart;
+                            yOfPointOfInterest = focusY - yPositionOfSurfaceViewGraphOutlineOuterUpperPart;
+
+                            if(areFocusXandFocusYOnSurfaceView(xOfPointOfInterest, yOfPointOfInterest)){
+
+                                lengthX = xOfPointOfInterest - surfaceView.getX();
+                                lengthY = yOfPointOfInterest - surfaceView.getY();
+
+                                xOfScaleCenter = xOfPointOfInterest;
+                                yOfScaleCenter = yOfPointOfInterest;
+
+                            }else{
+
+                                lengthX = (float) (surfaceView.getMeasuredWidth()/2.0);
+                                lengthY = (float) (surfaceView.getMeasuredHeight()/2.0);
+
+                                xOfScaleCenter = surfaceView.getX() + lengthX;
+                                yOfScaleCenter = surfaceView.getY() + lengthY;
+
+                            }
+
+                            pivotX = lengthX;
+                            pivotY = lengthY;
+
+                            surfaceView.setPivotX(pivotX);
+                            surfaceView.setPivotY(pivotY);
+
+
+                        }
+                    }
+                }
+
                 return true;
             }
 
             @Override
             public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
 
+                if(scaleGestureDetector != null){
 
-                float spanX = scaleGestureDetector.
-                        getCurrentSpanX();
-                float spanY = scaleGestureDetector.
-                        getCurrentSpanY();
+                    float spanX = scaleGestureDetector.
+                            getCurrentSpanX();
+                    float spanY = scaleGestureDetector.
+                            getCurrentSpanY();
 
-                float widthScale = spanX / lastSpanX;
-                widthScale = Math.max(0.9f, Math.min(widthScale, 1.1f));
+                    if(lastSpanX != 0 && lastSpanY != 0){
 
-                float heightScale = spanY / lastSpanY;
-                heightScale = Math.max(0.9f, Math.min(heightScale, 1.1f));
+                        scaleFactorX = spanX / lastSpanX;
+                        scaleFactorY = spanY / lastSpanY;
 
+                        if(surfaceView != null) {
 
-                int minWidth= 40;
-                int scaledWidth = (int)(surfaceView.getLayoutParams().width * widthScale);
-                if(scaledWidth < minWidth){
-                    surfaceView.getLayoutParams().width = minWidth;
-                }else{
-                    surfaceView.getLayoutParams().width = scaledWidth;
+                            surfaceView.setScaleX(scaleFactorX);
+                            surfaceView.setScaleY(scaleFactorY);
+                        }
+                    }
+
                 }
-
-
-                int minHeigth= 40;
-                int scaledHeight = (int)(surfaceView.getLayoutParams().height * heightScale);
-                if(scaledHeight < minHeigth){
-                    surfaceView.getLayoutParams().height = minHeigth;
-                }else{
-                    surfaceView.getLayoutParams().height = scaledHeight;
-                }
-
-
-                TextView textViewInvisibleForLongitudeSpaceAllocationOneOne = (TextView) findViewById(R.id.textViewInvisibleForLongitudeSpaceAllocationOneOne);
-
-                int widthOfSpaceForText = 8 * textViewInvisibleForLongitudeSpaceAllocationOneOne.getMeasuredWidth();
-                int heightOfSpaceForText = 8 * textViewInvisibleForLongitudeSpaceAllocationOneOne.getMeasuredHeight();
-
-                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).getLayoutParams().width
-                        = surfaceView.getLayoutParams().width;
-                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).getLayoutParams().height
-                        = surfaceView.getLayoutParams().height + heightOfSpaceForText;
-
-                findViewById(R.id.constraintLayoutGraphPart).getLayoutParams().width
-                        = surfaceView.getLayoutParams().width + widthOfSpaceForText;
-                findViewById(R.id.constraintLayoutGraphPart).getLayoutParams().height
-                        = surfaceView.getLayoutParams().height + heightOfSpaceForText;
-
-                findViewById(R.id.constraintLayoutGraphPart).requestLayout();
-                findViewById(R.id.surfaceViewGraphOutlineVerticalPart).requestLayout();
-                surfaceView.requestLayout();
 
                 return true;
             }
+
+
+            @Override
+            public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+
+                if(scaleGestureDetector != null){
+
+                    if(surfaceView != null){
+
+                        surfaceView.setPivotX(0);
+                        surfaceView.setPivotY(0);
+
+                        scaleFactorX = surfaceView.getScaleX();
+                        scaleFactorY = surfaceView.getScaleY();
+
+                        surfaceView.setScaleX(1);
+                        surfaceView.setScaleY(1);
+
+                        int surfaceViewMeasuredWidth = surfaceView.getMeasuredWidth();
+                        int surfaceViewMeasuredHeight = surfaceView.getMeasuredHeight();
+
+                        int scaledWidth = (int) (surfaceViewMeasuredWidth * scaleFactorX);
+                        int scaledHeight = (int) (surfaceViewMeasuredHeight * scaleFactorY);
+
+                        if(scaledWidth < minWidth){
+
+                            if(surfaceViewMeasuredWidth != 0){
+                                scaleFactorX = minWidth / surfaceViewMeasuredWidth;
+                            }
+
+                            surfaceView.getLayoutParams().width = (int) minWidth;
+
+                        }else if(scaledWidth <= maxWidth){
+
+                            surfaceView.getLayoutParams().width = scaledWidth;
+
+                        }else{
+
+                            if(surfaceViewMeasuredWidth != 0){
+                                scaleFactorX = maxWidth / surfaceViewMeasuredWidth;
+                            }
+
+                            surfaceView.getLayoutParams().width = (int) maxWidth;
+
+                        }
+
+
+                        if(scaledHeight < minHeight){
+
+                            if(surfaceViewMeasuredHeight != 0) {
+                                scaleFactorY = minHeight / surfaceViewMeasuredHeight;
+                            }
+
+                            surfaceView.getLayoutParams().height = (int) minHeight;
+
+                        }else if(scaledHeight <= maxHeight){
+
+                            surfaceView.getLayoutParams().height = scaledHeight;
+
+                        }else{
+
+                            if(surfaceViewMeasuredHeight != 0) {
+                                scaleFactorY = maxHeight / surfaceViewMeasuredHeight;
+                            }
+
+                            surfaceView.getLayoutParams().height = (int) maxHeight;
+
+                        }
+
+
+                        surfaceView.requestLayout();
+
+                        surfaceView.setX(xOfScaleCenter - lengthX*scaleFactorX);
+                        surfaceView.setY(yOfScaleCenter - lengthY*scaleFactorY);
+
+                    }
+                }
+
+                scalingInProgress = false;
+
+            }
+
+
         };
 
-        scaleDetectorGraph = new ScaleGestureDetector(surfaceView.getContext(), scaleGestureListener);
+
+        if(surfaceView != null){
+
+            if(scaleGestureListener != null){
+
+                scaleDetectorGraph = new ScaleGestureDetector(surfaceView.getContext(), scaleGestureListener);
+            }
+        }
+
 
     }
 
+
+    private boolean areFocusXandFocusYOnSurfaceView(float xOfPointOfInterest, float yOfPointOfInterest) {
+
+        boolean retVal = false;
+
+        if(surfaceView != null){
+
+            float surfaceViewX =surfaceView.getX();
+            float surfaceViewY =surfaceView.getY();
+
+            if((surfaceViewX <= xOfPointOfInterest && xOfPointOfInterest <= (surfaceViewX+surfaceView.getMeasuredWidth())) &&
+                    (surfaceViewY<= yOfPointOfInterest && yOfPointOfInterest <= (surfaceViewY+surfaceView.getMeasuredHeight()))) {
+
+                retVal = true;
+            }
+        }
+
+        return retVal;
+
+    }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         boolean retVal = scaleDetectorGraph.onTouchEvent(event);
         retVal = gestureDetector.onTouchEvent(event) || retVal;
         return retVal || super.onTouchEvent(event);
-
     }
 
 
@@ -909,10 +1083,10 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
     private void setValuesOfGraphLimitsForNoData(){
 
-        textViewMinLongitudeLineTwo.setText(getString(R.string.graph_longitude_min));
-        textViewMaxLongitudeLineTwo.setText(getString(R.string.graph_longitude_max));
-        textViewMinLatitudeLineTwo.setText(getString(R.string.graph_latitude_min));
-        textViewMaxLatitudeLineTwo.setText(getString(R.string.graph_latitude_max));
+        textViewMinLongitudeValue.setText(getString(R.string.graph_longitude_min));
+        textViewMaxLongitudeValue.setText(getString(R.string.graph_longitude_max));
+        textViewMinLatitudeValue.setText(getString(R.string.graph_latitude_min));
+        textViewMaxLatitudeValue.setText(getString(R.string.graph_latitude_max));
 
     }
 
@@ -1110,22 +1284,23 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         if(extremumValuesOfLongitude != null){
 
             Double minValueOfLongitude = extremumValuesOfLongitude.getMinValue();
-            textViewMinLongitudeLineTwo.setText(Double.toString(minValueOfLongitude));
+            textViewMinLongitudeValue.setText(Double.toString(minValueOfLongitude));
 
             Double maxValueOfLongitude = extremumValuesOfLongitude.getMaxValue();
-            textViewMaxLongitudeLineTwo.setText(Double.toString(maxValueOfLongitude));
+            textViewMaxLongitudeValue.setText(Double.toString(maxValueOfLongitude));
 
         }
 
         if(extremumValuesOfLatitude != null){
 
             Double minValueOfLatitude = extremumValuesOfLatitude.getMinValue();
-            textViewMinLatitudeLineTwo.setText(Double.toString(minValueOfLatitude));
+            textViewMinLatitudeValue.setText(Double.toString(minValueOfLatitude));
 
             Double maxValueOfLatitude = extremumValuesOfLatitude.getMaxValue();
-            textViewMaxLatitudeLineTwo.setText(Double.toString(maxValueOfLatitude));
+            textViewMaxLatitudeValue.setText(Double.toString(maxValueOfLatitude));
 
         }
+
 
     }
 
