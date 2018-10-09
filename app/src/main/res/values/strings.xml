@@ -25,11 +25,11 @@
     <string name="graph_constant_width_string_longitude">AA</string>
     <string name="graph_constant_width_string_latitude">AA</string>
 
-    <string name="graph_longitude_min_label">| Longitude Min (Degree)</string>
-    <string name="graph_longitude_max_label">| Longitude Max (Degree)</string>
+    <string name="graph_longitude_min_label">| Longitude Min (deg)</string>
+    <string name="graph_longitude_max_label">| Longitude Max (deg)</string>
 
-    <string name="graph_latitude_min_label">- Latitude Min (Degree)</string>
-    <string name="graph_latitude_max_label">- Latitude Max (Degree)</string>
+    <string name="graph_latitude_min_label">- Latitude Min (deg)</string>
+    <string name="graph_latitude_max_label">- Latitude Max (deg)</string>
 
     <string name="graph_latitude_max">90</string>
     <string name="graph_latitude_min">-90</string>
@@ -69,12 +69,12 @@
     <string name="no_data_to_display_label">No data to display!</string>
 
     <string name="time_label">Time</string>
-    <string name="latitude_label">Latitude (Degree)</string>
-    <string name="longitude_label">Longitude (Degree)</string>
-    <string name="altitude_label">Altitude</string>
-    <string name="speed_label">Speed</string>
-    <string name="accuracy_label">Accuracy</string>
-    <string name="bearing_label">Bearing</string>
+    <string name="latitude_label">Latitude (deg)</string>
+    <string name="longitude_label">Longitude (deg)</string>
+    <string name="altitude_label">Altitude (m)</string>
+    <string name="speed_label">Speed (m/s)</string>
+    <string name="accuracy_label">Accuracy (m)</string>
+    <string name="bearing_label">Bearing (deg)</string>
     <string name="provider_label">Provider</string>
     <string name="information_label">Information</string>
     <string name="punctuation_mark_colon_and_space">" :  "</string>
