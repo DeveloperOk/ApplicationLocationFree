@@ -36,6 +36,9 @@ public class DataAddInformationActivity extends AppCompatActivity {
     AlertDialog.Builder alertDialogBuilder;
     AlertDialog alertDialog;
 
+    AlertDialog.Builder alertDialogBuilderForNoData;
+    AlertDialog alertDialogForNoData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class DataAddInformationActivity extends AppCompatActivity {
         addButtonListeners();
 
         instantiateAlertDialog();
+        instantiateAlertDialogForNoData();
 
     }
 
@@ -79,6 +83,22 @@ public class DataAddInformationActivity extends AppCompatActivity {
         });
 
         alertDialog = alertDialogBuilder.create();
+
+    }
+
+    private void instantiateAlertDialogForNoData() {
+
+        alertDialogBuilderForNoData = new AlertDialog.Builder(this);
+
+        alertDialogBuilderForNoData.setTitle(R.string.add_information_dialog_title_for_no_data);
+        alertDialogBuilderForNoData.setMessage(R.string.add_information_dialog_message_for_no_data);
+        alertDialogBuilderForNoData.setNeutralButton(R.string.add_information_dialog_neutral_button_for_no_data, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialogForNoData = alertDialogBuilderForNoData.create();
 
     }
 
@@ -120,7 +140,14 @@ public class DataAddInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View vw) {
 
-                addInformation();
+                if(currentLocationData != null){
+
+                    addInformation();
+                }else{
+
+                    alertDialogForNoData.show();
+                }
+
 
             }
         });
@@ -131,7 +158,7 @@ public class DataAddInformationActivity extends AppCompatActivity {
 
         String information = editTextInformation.getText().toString();
 
-        if(currentLocationData != null && information != null){
+        if(information != null){
 
             currentLocationData.setInformation(information);
 

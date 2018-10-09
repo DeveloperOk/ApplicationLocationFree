@@ -104,6 +104,10 @@
     <string name="add_information_dialog_message">Completed.</string>
     <string name="add_information_dialog_neutral_button">OK</string>
 
+    <string name="add_information_dialog_title_for_no_data">Information</string>
+    <string name="add_information_dialog_message_for_no_data">No data to add information.</string>
+    <string name="add_information_dialog_neutral_button_for_no_data">OK</string>
+
     <string name="data_export_dialog_title">Information</string>
     <string name="data_export_dialog_message_first_line">Completed.</string>
     <string name="data_export_dialog_message_second_line">"\nOutput File Path: "</string>
