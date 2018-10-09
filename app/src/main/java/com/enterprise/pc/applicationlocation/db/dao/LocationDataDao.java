@@ -54,4 +54,10 @@ public interface LocationDataDao {
     @Delete
     void delete(LocationData locationData);
 
+    @Query("select count(*) from locationdata")
+    long getTotalNumberOfData();
+
+    @Query("select count(*) from locationdata where id >= :startDateMs and id <= :endDateMs")
+    long getNumberOfDataBetweenStartTimeMsAndEndDateMs(long startDateMs, long endDateMs);
+
 }

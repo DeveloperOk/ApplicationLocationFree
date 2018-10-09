@@ -88,6 +88,7 @@
     <string name="data_export_progress_completed">"Progress: Completed"</string>
     <string name="data_export_progress">"Progress: "</string>
     <string name="data_export_first_line">"index;id;formattedTime;latitude;longitude;altitude;accuracy;provider;speed;bearing;information\n"</string>
+    <string name="data_export_selected_number_of_data">"Selected Data: "</string>
 
     <string name="data_add_information_activity_title">Add Information</string>
     <string name="textview_information">Information</string>
@@ -107,6 +108,10 @@
     <string name="data_export_dialog_message_first_line">Completed.</string>
     <string name="data_export_dialog_message_second_line">"\nOutput File Path: "</string>
     <string name="data_export_dialog_neutral_button">OK</string>
+
+    <string name="data_export_dialog_title_for_no_data">Information</string>
+    <string name="data_export_dialog_message_for_no_data">No data selected.</string>
+    <string name="data_export_dialog_neutral_button_for_no_data">OK</string>
 
     <string name="button_start_location_graph">Start</string>
     <string name="button_stop_location_graph">Stop</string>

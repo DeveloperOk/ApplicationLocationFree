@@ -73,4 +73,12 @@ public class DataRepository {
         return  mDatabase.locationDataDao().getLocationDataHavingInformationSync();
     }
 
+    public long getTotalNumberOfData(){
+        return  mDatabase.locationDataDao().getTotalNumberOfData();
+    }
+
+    public long getNumberOfDataBetweenStartTimeMsAndEndDateMs(long startDateMs, long endDateMs){
+        return  mDatabase.locationDataDao().getNumberOfDataBetweenStartTimeMsAndEndDateMs(startDateMs, endDateMs);
+    }
+
 }

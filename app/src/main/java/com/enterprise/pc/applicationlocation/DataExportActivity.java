@@ -3,6 +3,7 @@ package com.enterprise.pc.applicationlocation;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +40,14 @@ public class DataExportActivity extends AppCompatActivity {
     AlertDialog.Builder alertDialogBuilder;
     AlertDialog alertDialog;
 
+    AlertDialog.Builder alertDialogBuilderForNoData;
+    AlertDialog alertDialogForNoData;
+
     String pathOfOutputFile;
+
+    TextView textViewNumberOfSelectedData;
+    long numberOfSelectedData = 0;
+    long totalNumberOfData = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +66,90 @@ public class DataExportActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.controlsStartTime).findViewById(R.id.textViewHeader)).setText(R.string.controls_start_time_label);
         ((TextView) findViewById(R.id.controlsEndTime).findViewById(R.id.textViewHeader)).setText(R.string.controls_end_time_label);
 
-        setLimitsOfControls();
-
         startDate = new DateInformation();
         endDate = new DateInformation();
 
+        setLimitsOfControls();
+
         buttonExport = (Button)findViewById(R.id.buttonExport);
         textViewProgress = (TextView) findViewById(R.id.textViewProgress);
+        textViewNumberOfSelectedData = (TextView) findViewById(R.id.textViewNumberOfSelectedData);
 
         addListeners();
 
         instantiateAlertDialog();
+        instantiateAlertDialogForNoData();
 
+    }
+
+
+    private void setTextViewNumberOfSelectedData() {
+
+        executors.storageIO().execute(() -> {
+
+            if (dataRepository == null) {
+                dataRepository = ((BasicApp) getApplication()).getRepository();
+            }
+
+            totalNumberOfData = dataRepository.getTotalNumberOfData();
+
+            if(startDate !=null && endDate != null) {
+
+                String separatorStr = getString(R.string.controls_string_merge_str);
+
+                String startDateStr = getDateString(separatorStr, startDate);
+
+                String endDateStr = getDateString(separatorStr, endDate);
+
+                DateFormat dateFormat = new SimpleDateFormat(getString(R.string.controls_time_format_str_to_date));
+
+                Date dateStartDate;
+
+                try {
+
+                    dateStartDate = dateFormat.parse(startDateStr);
+
+                    Date dateEndDate;
+                    dateEndDate = dateFormat.parse(endDateStr);
+
+                    long startDateMs = dateStartDate.getTime();
+                    long endDateMs = dateEndDate.getTime();
+
+                    numberOfSelectedData = dataRepository.getNumberOfDataBetweenStartTimeMsAndEndDateMs(startDateMs, endDateMs);
+
+                    executors.mainThread().execute(() -> {
+
+                        if (textViewNumberOfSelectedData != null) {
+
+                            String outputText = getString(R.string.data_export_selected_number_of_data)
+                                    + numberOfSelectedData + "/" + totalNumberOfData;
+
+                            textViewNumberOfSelectedData.setText(outputText);
+
+                        }
+
+                    });
+
+                } catch (ParseException e) {
+
+                }
+
+            }
+
+        });
+
+    }
+
+    @NonNull
+    private static String getDateString(String separatorStr, DateInformation dateInformation) {
+
+        return Integer.toString(dateInformation.getYear()) + separatorStr +
+                            Integer.toString(dateInformation.getMonth()) + separatorStr +
+                            Integer.toString(dateInformation.getDay()) + separatorStr +
+                            Integer.toString(dateInformation.getHour()) + separatorStr +
+                            Integer.toString(dateInformation.getMinute()) + separatorStr +
+                            Integer.toString(dateInformation.getSecond()) + separatorStr +
+                            Integer.toString(dateInformation.getMillisecond());
     }
 
     private void instantiateAlertDialog() {
@@ -88,6 +168,22 @@ public class DataExportActivity extends AppCompatActivity {
 
     }
 
+    private void instantiateAlertDialogForNoData() {
+
+        alertDialogBuilderForNoData = new AlertDialog.Builder(this);
+
+        alertDialogBuilderForNoData.setTitle(R.string.data_export_dialog_title_for_no_data);
+        alertDialogBuilderForNoData.setMessage(R.string.data_export_dialog_message_for_no_data);
+        alertDialogBuilderForNoData.setNeutralButton(R.string.data_export_dialog_neutral_button_for_no_data, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialogForNoData = alertDialogBuilderForNoData.create();
+
+    }
+
 
     private void addListeners(){
 
@@ -103,10 +199,32 @@ public class DataExportActivity extends AppCompatActivity {
             @Override
             public void onClick(View vw) {
 
-                exportData();
+                if(areThereSelectedData()){
+
+                    exportData();
+                }else{
+
+                    executors.mainThread().execute(() -> {
+
+                        alertDialogForNoData.show();
+                    });
+                }
 
             }
         });
+
+    }
+
+    private boolean areThereSelectedData(){
+
+        boolean retVal = false;
+
+        if(numberOfSelectedData > 0){
+
+            retVal = true;
+        }
+
+        return retVal;
 
     }
 
@@ -116,6 +234,7 @@ public class DataExportActivity extends AppCompatActivity {
 
             buttonExport.setClickable(false);
             buttonExport.setVisibility(View.INVISIBLE);
+            textViewNumberOfSelectedData.setVisibility(View.INVISIBLE);
 
             textViewProgress.setVisibility(View.VISIBLE);
             textViewProgress.setText(getString(R.string.data_export_progress_started));
@@ -191,6 +310,7 @@ public class DataExportActivity extends AppCompatActivity {
 
                             buttonExport.setClickable(true);
                             buttonExport.setVisibility(View.VISIBLE);
+                            textViewNumberOfSelectedData.setVisibility(View.VISIBLE);
 
                             textViewProgress.setText(getString(R.string.data_export_progress_completed));
                             textViewProgress.setVisibility(View.INVISIBLE);
@@ -613,11 +733,14 @@ public class DataExportActivity extends AppCompatActivity {
         startDate.setMillisecond(0);
         endDate.setMillisecond(999);
 
+        setTextViewNumberOfSelectedData();
+
     }
 
 
     private void doOnValueChange(){
 
+        setTextViewNumberOfSelectedData();
     }
 
 
