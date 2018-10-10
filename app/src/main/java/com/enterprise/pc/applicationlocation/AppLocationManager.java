@@ -32,7 +32,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
     private static AppLocationManager sAppLocationManager;
     private static LocationManager sLocationManager;
     private static Context context;
-    private static Activity activity;
+    private static Activity sActivity;
 
     private static LocationListener locationListener;
 
@@ -41,11 +41,15 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
     private static LocationSettingsRequest.Builder locationSettingsRequestBuilder;
     private static LocationRequest locationRequestPriorityHighAccuracy;
     private static Task<LocationSettingsResponse> taskLocationSettingsResponse;
+    private static ResolvableApiException resolvable;
 
-    public static AppLocationManager getInstance(Context inputContext, Activity inputActivity) {
+    private static boolean previousStatusIsProviderEnabled = false;
+    private static boolean currentStatusIsProviderEnabled = false;
+
+
+    public static AppLocationManager getInstance(Context inputContext) {
 
         context = inputContext;
-        activity = inputActivity;
 
         if (sLocationManager == null) {
 
@@ -78,7 +82,8 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
     }
 
-    private static void registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn() {
+
+    private static void registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn(Activity activity) {
 
         locationRequestPriorityHighAccuracy = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -100,17 +105,18 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
             public void onComplete(Task<LocationSettingsResponse> task) {
                 try {
 
-                    registerListenerForGPSWhenGPSIsOn();
+                     previousStatusIsProviderEnabled = isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-                    if(!isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                     if(previousStatusIsProviderEnabled == true){
 
-                        LocationSettingsResponse response = task.getResult(ApiException.class);
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
+                         registerListenerForGPSWhenGPSIsOn();
+                     }else{
 
-                        registerListenerForGPSWhenGPSIsOn();
+                         LocationSettingsResponse response = task.getResult(ApiException.class);
+                         // All location settings are satisfied. The client can initialize location
+                         // requests here.
 
-                    }
+                     }
 
                 } catch (ApiException exception) {
                     switch (exception.getStatusCode()) {
@@ -118,20 +124,29 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied. But could be fixed by showing the
                             // user a dialog.
+
                             try {
+
                                 // Cast to a resolvable exception.
-                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                resolvable = (ResolvableApiException) exception;
                                 // Show the dialog by calling startResolutionForResult(),
                                 // and check the result in onActivityResult().
-                                resolvable.startResolutionForResult(
-                                        activity,
-                                        AppConstants.REQUEST_CHECK_SETTINGS);
+
+                                if(activity != null){
+
+                                    resolvable.startResolutionForResult(activity,
+                                            AppConstants.REQUEST_CHECK_SETTINGS);
+                                }
+
+
                             } catch (IntentSender.SendIntentException e) {
                                 // Ignore the error.
                             } catch (ClassCastException e) {
                                 // Ignore, should be an impossible error.
                             }
+
                             break;
+
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             // Location settings are not satisfied. However, we have no way to fix the
                             // settings so we won't show the dialog.
@@ -148,21 +163,35 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (requestCode) {
+
             case AppConstants.REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        // All required changes were successfully made
 
-                        registerListenerForGPSWhenGPSIsOn();
+                currentStatusIsProviderEnabled = isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // The user was asked to change settings, but chose not to
+                if(currentStatusIsProviderEnabled == true){
 
-                        break;
-                    default:
-                        break;
+                    registerListenerForGPSWhenGPSIsOn();
                 }
+
+                //There is problem in getting right resultCode so solution above is implemented.
+
+                //switch (resultCode) {
+                //    case Activity.RESULT_OK:
+                //        // All required changes were successfully made
+//
+                //        registerListenerForGPSWhenGPSIsOn();
+//
+                //        break;
+                //    case Activity.RESULT_CANCELED:
+                //        // The user was asked to change settings, but chose not to
+//
+                //        String test = "test";
+                //        String test2 = test;
+//
+                //        break;
+                //    default:
+                //        break;
+                //}
                 break;
         }
     }
@@ -187,6 +216,8 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
     public void checkPermissionAndRegisterListenerForGPS(Activity activity) {
 
+        sActivity = activity;
+
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -202,15 +233,16 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
             // Permission has already been granted
 
-            registerListenerForGPS();
+            registerListenerForGPS(activity);
 
         }
 
     }
 
-    public void registerListenerForGPS() {
+    public void registerListenerForGPS(Activity activity) {
 
-        registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn();
+        sActivity = activity;
+        registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn(activity);
 
     }
 
@@ -234,7 +266,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
     }
 
-    public void removeListenerForGPS() {
+    public static void removeListenerForGPS() {
 
         if(sLocationManager != null && locationListener != null){
 
@@ -258,7 +290,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
                     // permission was granted, yay! Do the
                     // ACCESS_FINE_LOCATION-related task you need to do.
 
-                    registerListenerForGPS();
+                    registerListenerForGPS(sActivity);
 
 
                 } else {

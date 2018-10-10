@@ -118,7 +118,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         startDate = new DateInformation();
         endDate = new DateInformation();
 
-        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager(LocationGraphActivity.this);
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
 
         addListeners();
 
@@ -542,7 +542,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                 if(appLocationManager != null){
 
-                    appLocationManager.registerListenerForGPS();
+                    appLocationManager.registerListenerForGPS(LocationGraphActivity.this);
                 }
 
             }
@@ -753,7 +753,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
                                 if (appLocationManager != null) {
                                     if (locationUpdateActiveOnCreate == true) {
-                                        appLocationManager.registerListenerForGPS();
+                                        appLocationManager.registerListenerForGPS(LocationGraphActivity.this);
                                     }
                                 }
 

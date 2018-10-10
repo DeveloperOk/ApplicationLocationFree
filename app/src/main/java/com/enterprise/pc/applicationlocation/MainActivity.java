@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
 
         });
 
-        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager(MainActivity.this);
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
 
         setLocationDataOnCreateAndOnResume();
 
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                appLocationManager.registerListenerForGPS();
+                appLocationManager.registerListenerForGPS(MainActivity.this);
 
             }
         });
