@@ -1,5 +1,6 @@
 package com.enterprise.pc.applicationlocation;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.enterprise.pc.applicationlocation.db.AppDatabase;
@@ -26,8 +27,8 @@ public class BasicApp extends Application {
 
     public DataRepository getRepository() { return DataRepository.getInstance(getDatabase()); }
 
-    public AppLocationManager getAppLocationManager() {
-        return AppLocationManager.getInstance(this);
+    public AppLocationManager getAppLocationManager(Activity inputActivity) {
+        return AppLocationManager.getInstance(this, inputActivity);
     }
 
 

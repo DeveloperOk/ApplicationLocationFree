@@ -2,6 +2,7 @@ package com.enterprise.pc.applicationlocation;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -117,7 +118,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         startDate = new DateInformation();
         endDate = new DateInformation();
 
-        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager(LocationGraphActivity.this);
 
         addListeners();
 
@@ -128,6 +129,18 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
 
         surfaceViewGraphOutlineOuterUpperPart = findViewById(R.id.surfaceViewGraphOutlineOuterUpperPart);
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(appLocationManager != null){
+
+            appLocationManager.onActivityResult(requestCode, resultCode, data);
+        }
 
     }
 
