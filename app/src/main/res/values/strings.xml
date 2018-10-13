@@ -84,8 +84,8 @@
     <string name="file_name_for_data_export">"Location Data "</string>
     <string name="date_format_for_data_export">yyyy MM dd HH mm ss SSS</string>
     <string name="file_extension_for_data_export">".txt"</string>
-    <string name="data_export_progress_started">"Progress: Started"</string>
-    <string name="data_export_progress_completed">"Progress: Completed"</string>
+    <string name="data_export_progress_started">"Progress: Started..."</string>
+    <string name="data_export_progress_completed">"Progress: Completed."</string>
     <string name="data_export_progress">"Progress: "</string>
     <string name="data_export_first_line">"index;id;formattedTime;latitude;longitude;altitude;accuracy;provider;speed;bearing;information\n"</string>
     <string name="data_export_selected_number_of_data">"Selected Data: "</string>

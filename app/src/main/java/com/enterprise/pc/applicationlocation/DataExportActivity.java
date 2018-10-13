@@ -144,12 +144,12 @@ public class DataExportActivity extends AppCompatActivity {
     private static String getDateString(String separatorStr, DateInformation dateInformation) {
 
         return Integer.toString(dateInformation.getYear()) + separatorStr +
-                            Integer.toString(dateInformation.getMonth()) + separatorStr +
-                            Integer.toString(dateInformation.getDay()) + separatorStr +
-                            Integer.toString(dateInformation.getHour()) + separatorStr +
-                            Integer.toString(dateInformation.getMinute()) + separatorStr +
-                            Integer.toString(dateInformation.getSecond()) + separatorStr +
-                            Integer.toString(dateInformation.getMillisecond());
+                Integer.toString(dateInformation.getMonth()) + separatorStr +
+                Integer.toString(dateInformation.getDay()) + separatorStr +
+                Integer.toString(dateInformation.getHour()) + separatorStr +
+                Integer.toString(dateInformation.getMinute()) + separatorStr +
+                Integer.toString(dateInformation.getSecond()) + separatorStr +
+                Integer.toString(dateInformation.getMillisecond());
     }
 
     private void instantiateAlertDialog() {
@@ -288,21 +288,36 @@ public class DataExportActivity extends AppCompatActivity {
                         FileOutputStream fileOutputStreamLocationDataOutput = initializeLocationDataOutputFile();
 
                         String progressStr = getString(R.string.data_export_progress);
-                        int index = 1;
+                        int index = 0;
                         int sizeOfLocationDataList = locationDataList.size();
 
-                        for(LocationData locationData : locationDataList){
+                        int numberOfDataToOutputAtATime = getNumberOfDataToOutputAtATime(sizeOfLocationDataList);
 
-                            final int tempIndex = index;
+                        while(index < sizeOfLocationDataList){
 
-                            writeDataToFile(index, locationData, fileOutputStreamLocationDataOutput);
+                            String formattedData = "";
+
+                            int indexLimit = index + numberOfDataToOutputAtATime;
+
+                            int lineIndex = 1;
+                            while(index < indexLimit && index < sizeOfLocationDataList){
+
+                                lineIndex = index + 1;
+                                formattedData = formattedData + getFormattedData(lineIndex, locationDataList.get(index));
+
+                                index++;
+                            }
+
+                            writeDataToFile(formattedData, fileOutputStreamLocationDataOutput);
+
+                            final int progressIndex = lineIndex;
 
                             executors.mainThread().execute(() -> {
-                                textViewProgress.setText(progressStr + tempIndex + "/" + sizeOfLocationDataList);
+                                textViewProgress.setText(progressStr + progressIndex + "/" + sizeOfLocationDataList);
                             });
 
-                            index++;
                         }
+
 
                         closeLocationDataOutputFile(fileOutputStreamLocationDataOutput);
 
@@ -329,6 +344,65 @@ public class DataExportActivity extends AppCompatActivity {
 
             } catch (ParseException e) {
 
+            }
+
+        }
+
+    }
+
+    private int getNumberOfDataToOutputAtATime(int sizeOfLocationDataList) {
+
+        int numberOfDataToOutputAtATime = (int)(sizeOfLocationDataList * AppConstants.NumberOfDataToOutputAtATimeRatio);
+
+        if(numberOfDataToOutputAtATime > AppConstants.MaxNumberOfDataToOutputAtATime){
+
+            numberOfDataToOutputAtATime = AppConstants.MaxNumberOfDataToOutputAtATime;
+
+        } else if(numberOfDataToOutputAtATime < AppConstants.MinNumberOfDataToOutputAtATime){
+
+            numberOfDataToOutputAtATime = AppConstants.MinNumberOfDataToOutputAtATime;
+
+        }
+
+        return numberOfDataToOutputAtATime;
+    }
+
+    private String getFormattedData(int index, LocationData locationData) {
+
+        String outputLine = "";
+
+        if(locationData != null) {
+
+            outputLine = index
+                    + ";" + locationData.getId()
+                    + ";" + locationData.getFormattedTime()
+                    + ";" + locationData.getLatitude()
+                    + ";" + locationData.getLongitude()
+                    + ";" + locationData.getAltitude()
+                    + ";" + locationData.getAccuracy()
+                    + ";" + locationData.getProvider()
+                    + ";" + locationData.getSpeed()
+                    + ";" + locationData.getBearing()
+                    + ";" + locationData.getInformation()
+                    + "\n";
+        }
+
+        return outputLine;
+    }
+
+    private void writeDataToFile(String outputData, FileOutputStream fileOutputStreamLocationDataOutput){
+
+        if(outputData != null && fileOutputStreamLocationDataOutput != null){
+
+            try {
+
+                if (isExternalStorageWritable()) {
+
+                    fileOutputStreamLocationDataOutput.write(outputData.getBytes());
+                }
+
+            } catch (IOException e) {
+                //e.printStackTrace();
             }
 
         }
@@ -367,37 +441,6 @@ public class DataExportActivity extends AppCompatActivity {
         return fileOutputStreamLocationDataOutput;
     }
 
-    private void writeDataToFile(int index, LocationData locationData, FileOutputStream fileOutputStreamLocationDataOutput){
-
-        if(locationData != null && fileOutputStreamLocationDataOutput != null){
-
-            String outputLine = index
-                    + ";" + locationData.getId()
-                    + ";" + locationData.getFormattedTime()
-                    + ";" + locationData.getLatitude()
-                    + ";" + locationData.getLongitude()
-                    + ";" + locationData.getAltitude()
-                    + ";" + locationData.getAccuracy()
-                    + ";" + locationData.getProvider()
-                    + ";" + locationData.getSpeed()
-                    + ";" + locationData.getBearing()
-                    + ";" + locationData.getInformation()
-                    + "\n";
-
-            try {
-
-                if (isExternalStorageWritable()) {
-
-                    fileOutputStreamLocationDataOutput.write(outputLine.getBytes());
-                }
-
-            } catch (IOException e) {
-                //e.printStackTrace();
-            }
-
-        }
-
-    }
 
     private void closeLocationDataOutputFile(FileOutputStream fileOutputStreamLocationDataOutput){
 
