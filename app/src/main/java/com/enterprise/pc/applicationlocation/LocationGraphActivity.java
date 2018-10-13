@@ -118,7 +118,7 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         startDate = new DateInformation();
         endDate = new DateInformation();
 
-        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager(this);
 
         addListeners();
 
@@ -1393,6 +1393,19 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
         extremumValues.setMinValue(minValue);
 
         return extremumValues;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(appLocationManager != null){
+
+            appLocationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
     }
 
 }

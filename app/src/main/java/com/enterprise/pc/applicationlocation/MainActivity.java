@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
 
         });
 
-        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager();
+        appLocationManager = ((BasicApp) getApplication()).getAppLocationManager(this);
 
         setLocationDataOnCreateAndOnResume();
 
@@ -350,5 +350,19 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(appLocationManager != null){
+
+            appLocationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }
+
 
 }

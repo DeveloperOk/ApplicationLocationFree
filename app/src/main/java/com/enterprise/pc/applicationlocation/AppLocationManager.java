@@ -26,13 +26,14 @@ import com.google.android.gms.tasks.Task;
  * Created by PC on 2018-05-06.
  */
 
-public class AppLocationManager implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class AppLocationManager {
 
 
     private static AppLocationManager sAppLocationManager;
     private static LocationManager sLocationManager;
     private static Context context;
-    private static Activity sActivity;
+
+    private static Activity mActivity;
 
     private static LocationListener locationListener;
 
@@ -47,9 +48,10 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
     private static boolean currentStatusIsProviderEnabled = false;
 
 
-    public static AppLocationManager getInstance(Context inputContext) {
+    public static AppLocationManager getInstance(Context inputContext, Activity activity) {
 
         context = inputContext;
+        mActivity = activity;
 
         if (sLocationManager == null) {
 
@@ -84,6 +86,8 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
 
     private static void registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn(Activity activity) {
+
+        mActivity = activity;
 
         locationRequestPriorityHighAccuracy = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -216,7 +220,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
     public void checkPermissionAndRegisterListenerForGPS(Activity activity) {
 
-        sActivity = activity;
+        mActivity = activity;
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(context,
@@ -241,7 +245,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
     public void registerListenerForGPS(Activity activity) {
 
-        sActivity = activity;
+        mActivity = activity;
         registerListenerForGPSAndIfGPSIsOffAskUserToTurnOn(activity);
 
     }
@@ -262,6 +266,12 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
 
                 }
 
+            }else{
+
+                ActivityCompat.requestPermissions(mActivity,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        AppConstants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
             }
 
     }
@@ -278,7 +288,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
     }
 
 
-    @Override
+
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -290,7 +300,7 @@ public class AppLocationManager implements ActivityCompat.OnRequestPermissionsRe
                     // permission was granted, yay! Do the
                     // ACCESS_FINE_LOCATION-related task you need to do.
 
-                    registerListenerForGPS(sActivity);
+                    registerListenerForGPS(mActivity);
 
 
                 } else {
