@@ -1,0 +1,79 @@
+
+
+
+
+Play Console
+play.google.com/apps/publish
+
+Checklist
+https://developer.android.com/distribute/best-practices/launch/launch-checklist.html
+
+Shortcuts link
+https://developer.android.com/studio/intro/keyboard-shortcuts.html
+
+
+
+End-user License Agreement
+
+Consider preparing an End User License Agreement (EULA) for your application. 
+A EULA can help protect your person, organization, and intellectual property, and we recommend that you provide one with your application.
+
+------------------------------------------------------
+It is not allowed to copy and distribute the application of Application Location without the permission of the owner of the application.
+------------------------------------------------------
+
+
+
+
+Miscellaneous Materials
+
+You might also have to prepare promotional and marketing materials to publicize your application. 
+For example, if you are releasing your application on Google Play you will need to prepare some promotional text 
+and you will need to create screenshots of your application. For more information, see
+
+
+------------------------------------------------------
+Application Location
+
+Not guaranteed to work on every device. 
+
+Shows location data. 
+
+Features: 
+- Showing location data as graph between the selected dates or as a live graph. 
+- Exporting location data between the selected dates. 
+- Adding and updating notes to location data. 
+- Listing location data having notes. 
+
+Language of application: English and the language of the device/system. 
+
+Keywords: Position, latitude, longitude, altitude, speed, time and graph. 
+------------------------------------------------------
+
+
+
+remote repository path in form of URL
+file:///C/Users/PC/Google Drive/Development/AndroidProjects/ApplicationLocation
+
+
+
+Initialize and configure remote repository
+git init
+git config --bool core.bare true
+(Make remote repository bare, otherwise push does not work)
+
+
+Generate Signed APK
+In Android Studio, Build -> Generate Signed APK 
+Key store path: F:\DataPC\AndroidApkSigning\keystores\androidkeystore.jks
+Key store password: password which ends with 1
+Key alias: androidKey20181013
+Key password: password which ends with 4
+
+
+While signing apk both of signature versions below are chosen
+Signature Versions: V1(Jar Signature) V2(Full APK Signature)
+
+
+signed apk location
+C:\Devel\AndroidProjects\ApplicationLocation\app\release
