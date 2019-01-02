@@ -148,4 +148,9 @@
     <string name="activity_data_update_information_dialog_message">Updated.</string>
     <string name="activity_data_update_information_dialog_neutral_button">OK</string>
 
+    <string name="turn_on_gps_dialog_title">Information</string>
+    <string name="turn_on_gps_dialog_message">Location provider is off. Would you like to turn on location provider?</string>
+    <string name="turn_on_gps_dialog_positive_button">YES</string>
+    <string name="turn_on_gps_dialog_negative_button">NO</string>
+
 </resources>

@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity{
 
         setLocationDataOnCreateAndOnResume();
 
+        if(appLocationManager != null) {
+
+            appLocationManager.registerListenerForGPSWhenReturningFromLocationSettingsPage(this);
+        }
+
     }
 
     @Override

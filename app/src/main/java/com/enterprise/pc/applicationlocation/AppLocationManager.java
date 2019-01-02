@@ -2,12 +2,14 @@ package com.enterprise.pc.applicationlocation;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -47,6 +49,10 @@ public class AppLocationManager {
     private static boolean previousStatusIsProviderEnabled = false;
     private static boolean currentStatusIsProviderEnabled = false;
 
+    private static AlertDialog.Builder alertDialogBuilderToTurnOnGPS;
+    private static AlertDialog alertDialogToTurnOnGPS;
+
+    private static boolean comingFromLocationSettingsPageFlag = false;
 
     public static AppLocationManager getInstance(Context inputContext, Activity activity) {
 
@@ -64,6 +70,54 @@ public class AppLocationManager {
         }
 
         return sAppLocationManager;
+
+    }
+
+    public void registerListenerForGPSWhenReturningFromLocationSettingsPage(Activity activity){
+
+        mActivity = activity;
+
+        if(isComingFromLocationSettingsPageFlag() == true){
+
+            registerListenerForGPS(activity);
+
+        }
+
+    }
+
+    public static boolean isComingFromLocationSettingsPageFlag() {
+        return comingFromLocationSettingsPageFlag;
+    }
+
+    public static void setComingFromLocationSettingsPageFlag(boolean comingFromLocationSettingsPageFlag) {
+        AppLocationManager.comingFromLocationSettingsPageFlag = comingFromLocationSettingsPageFlag;
+    }
+
+    private static void instantiateAlertDialogAndShow(Activity activity) {
+
+        alertDialogBuilderToTurnOnGPS = new AlertDialog.Builder(activity);
+
+        alertDialogBuilderToTurnOnGPS.setTitle(R.string.turn_on_gps_dialog_title);
+        alertDialogBuilderToTurnOnGPS.setMessage(R.string.turn_on_gps_dialog_message);
+        alertDialogBuilderToTurnOnGPS.setPositiveButton(R.string.turn_on_gps_dialog_positive_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                comingFromLocationSettingsPageFlag = true;
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                activity.startActivity(intent);
+
+            }
+        });
+        alertDialogBuilderToTurnOnGPS.setNegativeButton(R.string.turn_on_gps_dialog_negative_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialogToTurnOnGPS = alertDialogBuilderToTurnOnGPS.create();
+
+        alertDialogToTurnOnGPS.show();
+
 
     }
 
@@ -113,6 +167,7 @@ public class AppLocationManager {
 
                      if(previousStatusIsProviderEnabled == true){
 
+                         setComingFromLocationSettingsPageFlag(false);
                          registerListenerForGPSWhenGPSIsOn();
                      }else{
 
@@ -138,13 +193,15 @@ public class AppLocationManager {
 
                                 if(activity != null){
 
-                                    resolvable.startResolutionForResult(activity,
-                                            AppConstants.REQUEST_CHECK_SETTINGS);
+                                    if(isComingFromLocationSettingsPageFlag() != true){
+
+                                        instantiateAlertDialogAndShow(activity);
+                                    }
+                                    setComingFromLocationSettingsPageFlag(false);
+
                                 }
 
 
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
                             } catch (ClassCastException e) {
                                 // Ignore, should be an impossible error.
                             }
@@ -196,6 +253,7 @@ public class AppLocationManager {
                 //    default:
                 //        break;
                 //}
+
                 break;
         }
     }
