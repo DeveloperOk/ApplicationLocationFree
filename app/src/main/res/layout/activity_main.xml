@@ -59,8 +59,8 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_start"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/buttonGraph"
+                    app:layout_constraintRight_toLeftOf="@+id/buttonAdd"
                     app:layout_constraintTop_toBottomOf="@+id/dataProperties" />
 
                 <Button
@@ -72,8 +72,8 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_stop"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/buttonExport"
+                    app:layout_constraintRight_toLeftOf="@+id/buttonList"
                     app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
 
                 <Button
@@ -82,12 +82,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="20dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_graph"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/buttonAdd"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
+                    app:layout_constraintRight_toLeftOf="@+id/buttonStart"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonStart" />
 
                 <Button
                     android:id="@+id/buttonAdd"
@@ -97,9 +96,9 @@
                     android:layout_marginRight="5dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_add"
-                    app:layout_constraintLeft_toRightOf="@+id/buttonGraph"
+                    app:layout_constraintLeft_toRightOf="@+id/buttonStart"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonGraph" />
+                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonStart" />
 
                 <Button
                     android:id="@+id/buttonExport"
@@ -107,13 +106,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_export"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/buttonList"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonGraph" />
+                    app:layout_constraintRight_toLeftOf="@+id/buttonStop"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonStop" />
 
                 <Button
                     android:id="@+id/buttonList"
@@ -123,9 +120,9 @@
                     android:layout_marginRight="5dp"
                     android:background="@color/colorButton"
                     android:text="@string/button_list"
-                    app:layout_constraintLeft_toRightOf="@+id/buttonExport"
+                    app:layout_constraintLeft_toRightOf="@+id/buttonStop"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonExport" />
+                    app:layout_constraintBaseline_toBaselineOf="@+id/buttonStop" />
 
 
             </android.support.constraint.ConstraintLayout>
