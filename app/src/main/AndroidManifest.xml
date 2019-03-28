@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.enterprise.pc.applicationlocation">
+    package="com.enterprise.pc.applicationlocationfree">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -10,25 +10,25 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-        android:name=".BasicApp"
+        android:name="com.enterprise.pc.applicationlocationfree.BasicApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.enterprise.pc.applicationlocationfree.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocationGraphActivity" />
-        <activity android:name=".DataExportActivity" />
-        <activity android:name=".DataAddInformationActivity" />
-        <activity android:name=".ListDataActivity" />
-        <activity android:name=".DataUpdateInformationActivity"></activity>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.LocationGraphActivity" />
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataExportActivity" />
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataAddInformationActivity" />
+        <activity android:name="com.enterprise.pc.applicationlocationfree.ListDataActivity" />
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataUpdateInformationActivity"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enterprise.pc.applicationlocation.DataExportActivity">
+    tools:context="com.enterprise.pc.applicationlocationfree.DataExportActivity">
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -39,7 +39,7 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                tools:context="com.enterprise.pc.applicationlocation.MainActivity">
+                tools:context="com.enterprise.pc.applicationlocationfree.MainActivity">
 
 
                 <android.support.constraint.ConstraintLayout
