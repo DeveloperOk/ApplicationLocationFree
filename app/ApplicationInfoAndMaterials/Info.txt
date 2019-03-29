@@ -1,5 +1,7 @@
 
 
+Google AdMob
+https://apps.admob.com
 
 
 Play Console
@@ -53,7 +55,7 @@ Keywords: Position, latitude, longitude, altitude, speed, time and graph.
 
 
 remote repository path in form of URL
-file:///C/Users/PC/Google Drive/Development/AndroidProjects/ApplicationLocation
+file:///C/Users/PC/Google Drive/Development/AndroidProjects/ApplicationLocationFV
 
 
 
@@ -65,9 +67,9 @@ git config --bool core.bare true
 
 Generate Signed APK
 In Android Studio, Build -> Generate Signed APK 
-Key store path: F:\DataPC\AndroidApkSigning\keystores\androidkeystore.jks
+Key store path: D:\DataPC\AndroidApkSigning\keystores\androidkeystore.jks
 Key store password: password which ends with 1
-Key alias: androidKey20181013
+Key alias: androidKey20190329
 Key password: password which ends with 4
 
 
@@ -76,4 +78,4 @@ Signature Versions: V1(Jar Signature) V2(Full APK Signature)
 
 
 signed apk location
-C:\Devel\AndroidProjects\ApplicationLocation\app\release
+C:\Projects\AndroidStudioProjects\ApplicationLocationFree\ApplicationLocationFV\app\release
