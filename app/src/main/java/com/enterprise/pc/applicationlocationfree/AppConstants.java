@@ -26,5 +26,5 @@ public class AppConstants {
     public static final int MinNumberOfDataToOutputAtATime = 1;
     public static final int MaxNumberOfDataToOutputAtATime = 1000;
     public static final float NumberOfDataToOutputAtATimeRatio = 0.1f;
-
+    
 }

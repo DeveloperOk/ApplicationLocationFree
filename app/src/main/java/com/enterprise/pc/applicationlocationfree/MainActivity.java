@@ -12,6 +12,10 @@ import android.widget.TextView;
 import com.enterprise.pc.applicationlocationfree.db.AppDatabase;
 import com.enterprise.pc.applicationlocationfree.db.entity.LocationData;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,10 +49,15 @@ public class MainActivity extends AppCompatActivity{
     AppLocationManager appLocationManager;
     LocationListener locationListener;
 
+    AdView mainActivityAdView;
+    AdRequest mainActivityAdRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setTitle(R.string.activity_main_title);
 
         executors = new AppExecutors();
 
@@ -75,6 +84,13 @@ public class MainActivity extends AppCompatActivity{
 
         addListeners();
 
+
+        MobileAds.initialize(this, getString(R.string.adMob_app_id_value));
+
+        mainActivityAdView = (AdView)findViewById(R.id.mainActivityAdView);
+
+        loadAd();
+
     }
 
     @Override
@@ -88,6 +104,26 @@ public class MainActivity extends AppCompatActivity{
             appLocationManager.registerListenerForGPSWhenReturningFromLocationSettingsPage(this);
         }
 
+        loadAd();
+
+    }
+
+    private void loadAd(){
+
+        mainActivityAdRequest = new AdRequest.Builder().build();
+
+        if(mainActivityAdView != null){
+
+            mainActivityAdView.loadAd(mainActivityAdRequest);
+        }else{
+
+            mainActivityAdView = (AdView)findViewById(R.id.mainActivityAdView);
+
+            if(mainActivityAdView != null){
+                mainActivityAdView.loadAd(mainActivityAdRequest);
+            }
+
+        }
     }
 
     @Override

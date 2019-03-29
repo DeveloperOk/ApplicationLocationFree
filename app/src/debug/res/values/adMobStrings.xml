@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        AdMob
+        When building and testing your apps, make sure you use test ads rather than live, production ads.
+        Failure to do so can lead to suspension of your account.
+        Therefore, test values are written below in this debug version of adMobStrings.xml
+    -->
+    <string name="adMob_app_id_value">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="adMob_unit_id_main_value">ca-app-pub-3940256099942544/6300978111</string>
+
+</resources>

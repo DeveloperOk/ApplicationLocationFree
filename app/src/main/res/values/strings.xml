@@ -2,6 +2,8 @@
 
     <string name="app_name">Application Location Free</string>
 
+    <string name="activity_main_title">Application Location</string>
+
     <string name="firstLineDefaultText">Test Successful!</string>
     <string name="secondLineDefaultText">Ready!</string>
 
@@ -153,4 +155,5 @@
     <string name="turn_on_gps_dialog_positive_button">YES</string>
     <string name="turn_on_gps_dialog_negative_button">NO</string>
 
+    
 </resources>
