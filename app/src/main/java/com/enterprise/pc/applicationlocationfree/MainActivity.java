@@ -114,13 +114,20 @@ public class MainActivity extends AppCompatActivity{
 
         if(mainActivityAdView != null){
 
-            mainActivityAdView.loadAd(mainActivityAdRequest);
+            if(mainActivityAdRequest != null) {
+
+                mainActivityAdView.loadAd(mainActivityAdRequest);
+            }
         }else{
 
             mainActivityAdView = (AdView)findViewById(R.id.mainActivityAdView);
 
             if(mainActivityAdView != null){
-                mainActivityAdView.loadAd(mainActivityAdRequest);
+
+                if(mainActivityAdRequest != null) {
+
+                    mainActivityAdView.loadAd(mainActivityAdRequest);
+                }
             }
 
         }
