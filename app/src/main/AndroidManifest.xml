@@ -18,18 +18,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.enterprise.pc.applicationlocationfree.MainActivity">
+        <activity android:name="com.enterprise.pc.applicationlocationfree.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.enterprise.pc.applicationlocationfree.LocationGraphActivity" />
-        <activity android:name="com.enterprise.pc.applicationlocationfree.DataExportActivity" />
-        <activity android:name="com.enterprise.pc.applicationlocationfree.DataAddInformationActivity" />
-        <activity android:name="com.enterprise.pc.applicationlocationfree.ListDataActivity" />
-        <activity android:name="com.enterprise.pc.applicationlocationfree.DataUpdateInformationActivity"></activity>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.LocationGraphActivity"
+            android:exported="true"/>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataExportActivity"
+            android:exported="true"/>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataAddInformationActivity"
+            android:exported="true"/>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.ListDataActivity"
+            android:exported="true"/>
+        <activity android:name="com.enterprise.pc.applicationlocationfree.DataUpdateInformationActivity"
+            android:exported="true"></activity>
 
         <!-- AdMob Application ID -->
         <meta-data

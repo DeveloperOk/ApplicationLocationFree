@@ -155,5 +155,8 @@
     <string name="turn_on_gps_dialog_positive_button">YES</string>
     <string name="turn_on_gps_dialog_negative_button">NO</string>
 
+    <string name="main_activity_dialog_title_for_no_data">Information</string>
+    <string name="main_activity_dialog_message_for_no_data">There are no data.</string>
+    <string name="main_activity_dialog_neutral_button_for_no_data">OK</string>
 
 </resources>

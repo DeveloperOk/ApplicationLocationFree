@@ -1,8 +1,10 @@
 package com.enterprise.pc.applicationlocationfree;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,13 +46,16 @@ public class MainActivity extends AppCompatActivity{
     DataRepository dataRepository;
 
 
-    LocationData currentLocationData;
+    LocationData currentLocationData = null;
 
     AppLocationManager appLocationManager;
     LocationListener locationListener;
 
     AdView mainActivityAdView;
     AdRequest mainActivityAdRequest;
+
+    AlertDialog.Builder alertDialogBuilderForNoData;
+    AlertDialog alertDialogForNoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -286,11 +291,33 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                Intent intent = new Intent(getApplicationContext(), LocationGraphActivity.class);
-                startActivity(intent);
+                if(currentLocationData != null ){
+                    Intent intent = new Intent(getApplicationContext(), LocationGraphActivity.class);
+                    startActivity(intent);
+                }else{
+                    showNoDataPopup();
+                }
 
             }
         });
+
+    }
+
+    private void showNoDataPopup() {
+
+        alertDialogBuilderForNoData = new AlertDialog.Builder(this);
+
+        alertDialogBuilderForNoData.setTitle(R.string.main_activity_dialog_title_for_no_data);
+        alertDialogBuilderForNoData.setMessage(R.string.main_activity_dialog_message_for_no_data);
+        alertDialogBuilderForNoData.setNeutralButton(R.string.main_activity_dialog_neutral_button_for_no_data, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        alertDialogForNoData = alertDialogBuilderForNoData.create();
+
+        alertDialogForNoData.show();
 
     }
 
@@ -300,8 +327,12 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                Intent intent = new Intent(getApplicationContext(), DataExportActivity.class);
-                startActivity(intent);
+                if(currentLocationData != null ){
+                    Intent intent = new Intent(getApplicationContext(), DataExportActivity.class);
+                    startActivity(intent);
+                }else{
+                    showNoDataPopup();
+                }
 
             }
         });
@@ -314,9 +345,13 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                Intent intent = new Intent(getApplicationContext(), DataAddInformationActivity.class);
-                intent.putExtra(AppConstants.CurrentLocationData, currentLocationData);
-                startActivity(intent);
+                if(currentLocationData != null ){
+                    Intent intent = new Intent(getApplicationContext(), DataAddInformationActivity.class);
+                    intent.putExtra(AppConstants.CurrentLocationData, currentLocationData);
+                    startActivity(intent);
+                }else{
+                    showNoDataPopup();
+                }
 
             }
         });
@@ -329,8 +364,12 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View vw) {
 
-                Intent intent = new Intent(getApplicationContext(), ListDataActivity.class);
-                startActivity(intent);
+                if(currentLocationData != null ){
+                    Intent intent = new Intent(getApplicationContext(), ListDataActivity.class);
+                    startActivity(intent);
+                }else{
+                    showNoDataPopup();
+                }
 
             }
         });
