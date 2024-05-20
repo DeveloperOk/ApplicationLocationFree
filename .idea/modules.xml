@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ApplicationLocationFV.iml" filepath="$PROJECT_DIR$/ApplicationLocationFV.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ApplicationLocationFree.iml" filepath="$PROJECT_DIR$/.idea/modules/ApplicationLocationFree.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ApplicationLocationFree.app.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
