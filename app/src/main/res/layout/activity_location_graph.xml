@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.enterprise.pc.applicationlocationfree.LocationGraphActivity">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/surfaceViewGraphOutlineOuterUpperPart"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -36,10 +36,10 @@
             android:layout_height="match_parent"
             layout="@layout/graph_layout_border"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/surfaceViewGraphOutlineOuterLowerPart"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content">
 
 
-                <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/constraintLayoutControlsPart"
@@ -80,7 +80,7 @@
                     tools:context="com.enterprise.pc.applicationlocationfree.LocationGraphActivity">
 
 
-                    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         xmlns:tools="http://schemas.android.com/tools"
                         android:id="@+id/constraintLayoutGraphRanges"
@@ -95,7 +95,7 @@
                         tools:context="com.enterprise.pc.applicationlocationfree.LocationGraphActivity">
 
 
-                        <android.support.constraint.Barrier
+                        <androidx.constraintlayout.widget.Barrier
                             android:id="@+id/barrierForVerticalAlignment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                             app:layout_constraintBaseline_toBaselineOf="@+id/textViewMinLongitudeLabel" />
 
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     <TextView
@@ -288,7 +288,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
 
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/controlsStartTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -300,9 +300,9 @@
                         android:layout_marginBottom="10dp" >
 
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/controlsEndTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -314,10 +314,10 @@
                         android:layout_marginBottom="10dp" >
 
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </HorizontalScrollView>
 
@@ -329,7 +329,7 @@
             android:layout_height="match_parent"
             layout="@layout/graph_layout_border"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

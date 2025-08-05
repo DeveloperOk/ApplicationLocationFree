@@ -1,15 +1,10 @@
 package com.enterprise.pc.applicationlocationfree;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -22,6 +17,13 @@ import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.enterprise.pc.applicationlocationfree.db.entity.LocationData;
 import com.enterprise.pc.applicationlocationfree.vm.DateInformation;
@@ -784,7 +786,11 @@ public class LocationGraphActivity extends AppCompatActivity implements SurfaceH
                     }
                 };
 
-                locationDataViewModel.getLocationData().observe(this, locationDataListObserver);
+                executors.mainThread().execute(() -> {
+
+                    locationDataViewModel.getLocationData().observe(this, locationDataListObserver);
+
+                });
 
             });
         }

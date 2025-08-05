@@ -1,7 +1,8 @@
 package com.enterprise.pc.applicationlocationfree;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.enterprise.pc.applicationlocationfree.db.AppDatabase;
 import com.enterprise.pc.applicationlocationfree.db.entity.LocationData;

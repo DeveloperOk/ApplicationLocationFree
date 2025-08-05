@@ -4,12 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.enterprise.pc.applicationlocationfree.db.AppDatabase;
 import com.enterprise.pc.applicationlocationfree.db.entity.LocationData;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     Button buttonStart;
     Button buttonStop;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
         addListeners();
 
 
-        MobileAds.initialize(this, getString(R.string.adMob_app_id_value));
+        MobileAds.initialize(this);
 
         mainActivityAdView = (AdView)findViewById(R.id.mainActivityAdView);
 

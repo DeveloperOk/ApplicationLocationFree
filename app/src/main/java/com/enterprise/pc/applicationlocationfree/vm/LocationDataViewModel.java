@@ -1,8 +1,10 @@
 package com.enterprise.pc.applicationlocationfree.vm;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.enterprise.pc.applicationlocationfree.db.entity.LocationData;
 
